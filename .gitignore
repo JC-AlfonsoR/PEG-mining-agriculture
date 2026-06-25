@@ -1,4 +1,20 @@
-/data
+/data/raw
+/data/0_Panel_CEDE
+/data/1_ANM_Proyectos Mineros Colombia
+/data/2_SGC_Zonas_Potenciales_Metales_Minerales_Preciosos
+/data/3_DANE_Departamentos_Municipios
+/data/4_MinEnergía_Recursos
+/data/5_ANM_datos_abiertos
+/data/6_SIPSA_Insumos_Factores
+/data/7_DANE_Población
+/data/8_Costos_producción_Agrícola
+/data/9_UPRA_EVA
+/data/10_UPME_ANM_Producción_regalías
+/data/11_Precios_PinkSheet
+/data/12_CensoAgropecuario_DANE
+/data/13_SGC_distritoAluvial
+/data/14_Saavedra_Romero_2021
+/data/15_Guia_practica_evaluacion_impacto
 /References
 *.png
 *.private
