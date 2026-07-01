@@ -29,5 +29,8 @@ from utils.paths import *
 # Nombres de las columnas
 from utils.nombres_columnas_df import *
 
+# Miscelaneos
+from utils.miscellaneous import *
+
 # helper print
 print("Environment loaded")
