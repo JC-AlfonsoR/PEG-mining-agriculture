@@ -29,6 +29,9 @@ from utils.paths import *
 # Nombres de las columnas
 from utils.nombres_columnas_df import *
 
+# Funcion para guardar diagnosticos
+from utils.save_diagnostic import*
+
 # Miscelaneos
 from utils.miscellaneous import *
 
