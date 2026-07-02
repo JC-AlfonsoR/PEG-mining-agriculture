@@ -10,7 +10,7 @@ This document tracks all datasets used in the project.
 - **Original source / URL:** https://datoscede.uniandes.edu.co/catalogo-de-datos/
 - **Date obtained:** 13-mar-2026
 - **Unit of observation** Municipio
-- **Processing script:** /engines/e1001_processs_UPRA.py
+- **Processing script:** [engines/e1001_processs_UPRA.py](../engines/e1001_processs_UPRA.py)
 - **Notes:**
 	- Entre diferentes variables a nivel municipal, el Panel CEDE incluye datos de Area Sembrada, Cosechada y producción de cultivos de interés.
 
@@ -22,10 +22,11 @@ This document tracks all datasets used in the project.
 - **Original source / URL (2007-2018):** https://agronet.gov.co/documentacion-estadisticas/agricola/reporte-evaluaciones-agropecuarias-eva-y-anuario-estadistico
 - **Date obtained:** 24-abr-2026
 - **Unit of observation** Municipio
-- **Processing script:** /engines/e1001_processs_UPRA.py
+- **Processing script:** [engines/e1001_processs_UPRA.py](../engines/e1001_processs_UPRA.py)
 - **Notes:**
 	- Datos de Area Sembrada, Cosechada y producción de cultivos de interés.
-	- Existe una base de datos para 2007-2018 y otra para 2019-2024. Las dos bases de datos no tienen las mismas columnas ni la misma taxonomía, por eso tuve que armonizarlas en /engines/e1001_processs_UPRA.py.
+	- Existe una base de datos para 2007-2018 y otra para 2019-2024. Las dos bases de datos no tienen las mismas columnas ni la misma taxonomía, por eso tuve que armonizarlas en [engines/e1001_processs_UPRA.py](../engines/e1001_processs_UPRA.py).
+ 	- Con esta base de datos genero [Panel 1001 cultivos UPRA](#panel-1001-cultivos-upra)
 
 ## aac ANM Títulos Mineros
 - **Type:** Raw
@@ -37,3 +38,13 @@ This document tracks all datasets used in the project.
 - **Processing script:** /engines/e2001_descargar_poligonostitulosmineros.py
 - **Notes:**
 	- En la sección de datos abiertos de la ANM se publica esta lista del histórico de los títulos mineros otorgados en Colombia
+
+## Panel 1001 cultivos UPRA
+- **Type:** Intermediate
+- **Folder:** /data/intermediate/1001_cultivos_UPRA.parquet
+- **Source institution:** Unidad de Planeación Rural Agropecuaria UPRA - Evaluaciones Agropecuarias Municipales EVA
+- **Unit of observation** Municipio-año
+- **Processing script:** [engines/e1001_processs_UPRA.py](../engines/e1001_processs_UPRA.py)
+- **Notes:**
+	- Son los datos UPRA-EVA 2007-2024 armonizados en la estructura de datos definida para este proyecto
+ 	- Se crea a partir de los datos [aab UPRA](#aab-upra)
