@@ -13,12 +13,13 @@ import numpy as np
 
 # Graficos
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # herramientas del sistema
 import sys
 
 import warnings
-warnings.filterwarnings("ignore")
+#warnings.filterwarnings("ignore")
 
 # revisar avance de ciclos
 from tqdm import tqdm
@@ -36,4 +37,4 @@ from utils.save_diagnostic import*
 from utils.miscellaneous import *
 
 # helper print
-print("Environment loaded")
+print("Setup general cargado")

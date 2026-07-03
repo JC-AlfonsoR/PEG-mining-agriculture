@@ -38,6 +38,8 @@ This document tracks all datasets used in the project.
 - **Processing script:** /engines/e2001_descargar_poligonostitulosmineros.py
 - **Notes:**
 	- En la sección de datos abiertos de la ANM se publica esta lista del histórico de los títulos mineros otorgados en Colombia
+	- Uso esta información para descargar todos los títulos mineros de la ANM como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)
+	- Los datos descargados de la ANM quedan en [2001_poligonos_titulosmineros.parquet](#datos-2001-poligonos-titulos-mineros)
 
 ## Panel 1001 cultivos UPRA
 - **Type:** Intermediate
@@ -48,3 +50,13 @@ This document tracks all datasets used in the project.
 - **Notes:**
 	- Son los datos UPRA-EVA 2007-2024 armonizados en la estructura de datos definida para este proyecto
  	- Se crea a partir de los datos [aab UPRA](#aab-upra)
+
+
+## Datos 2001 Poligonos titulos mineros
+- **Type:** Intermediate
+- **Folder:** /data/intermediate/2001_poligonos_titulosmineros.parquet
+- **Source institution:** Agencia Nacional de Minería (ANM)
+- **Unit of observation** Titulo minero
+- **Processing script:** [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py)
+- **Notes:**
+	- Los poligonos de los titulos mineros se descargan de la ANM como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)

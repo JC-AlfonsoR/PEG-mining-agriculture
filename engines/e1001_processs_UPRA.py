@@ -464,4 +464,4 @@ def run():
 
     #######################################################
     ### Exportar Panel
-    panel_cultivos.to_parquet(DATA/'intermediate/1001_cultivos_UPRA.parquet')
+    panel_cultivos.to_parquet(DATA/'intermediate/1001_panel_cultivos_UPRA.parquet')

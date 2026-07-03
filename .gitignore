@@ -1,3 +1,4 @@
+/.gitignore
 /data/raw
 /data/intermediate
 /data/0_Panel_CEDE
