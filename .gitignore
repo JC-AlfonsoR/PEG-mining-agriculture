@@ -1,5 +1,6 @@
 /.gitignore
 /data/raw
+*.pyc
 /data/intermediate
 /data/0_Panel_CEDE
 /data/1_ANM_Proyectos Mineros Colombia

@@ -41,6 +41,42 @@ This document tracks all datasets used in the project.
 	- Uso esta información para descargar todos los títulos mineros de la ANM como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)
 	- Los datos descargados de la ANM quedan en [2001_poligonos_titulosmineros.parquet](#datos-2001-poligonos-titulos-mineros)
 
+
+## aba SGC Zonas Potenciales Minerales
+- **Type:** Raw
+- **Folder:** /data/raw/aba_SGC_zonas_potenciales_minerales
+- **Source institution:** Servicio Geológico COlombiano
+- **Original source / URL:** https://datos.sgc.gov.co/search?tags=Recursos%2520Minerales
+- **Date obtained:** 09-jul-2026
+- **Unit of observation** Zona de potencial mineral
+- **Processing script:** /engines/e2011_armonizar taxonomias_minerales.py
+- **Notes:**
+	- En la sección de datos abiertos sobre minerales del Servicio GEológico Colombiano existen diferentes polígonos de estructuras geológicas.
+	- En este caso descargué los poligonos para todos los grupos minerales que definió el Servicio geológico Colombiano. En total son 7 grupos.
+	- Fue necesario hacer una armonización de las clasificaciones de los difenretes grupos minerales en las siguientes bases de datos:
+		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
+		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
+		- aca Produccion legal asociada a regalías
+		- ada Mineria ilegal
+	
+## abb SGC Distritos Aluviales
+- **Type:** Raw
+- **Folder:** /data/raw/abb_abb_SGC_distritos_aluviales
+- **Source institution:** Servicio Geológico COlombiano
+- **Original source / URL:** https://datos.sgc.gov.co/search?tags=Recursos%2520Minerales
+- **Date obtained:** 09-jul-2026
+- **Unit of observation** Zona de potencial mineral
+- **Processing script:** /engines/e2011_armonizar taxonomias_minerales.py
+- **Notes:**
+	- En la sección de datos abiertos sobre minerales del Servicio GEológico Colombiano existen diferentes polígonos de estructuras geológicas.
+	- En este caso descargué los poligonos de los distritos aluviales. Es importante distinguir entre minería de veta y minería de aluvión porque la actividad en aluvión tiende a ser más informal y a contaminar más.
+	- Fue necesario hacer una armonización de las clasificaciones de los difenretes grupos minerales en las siguientes bases de datos:
+		- abb Distritos Aluviales
+		- aba SGC Zonas Potenciales Minerales
+		- aca Produccion legal oro
+		- ada Mineria ilegal oro
+
+
 ## Panel 1001 cultivos UPRA
 - **Type:** Intermediate
 - **Folder:** /data/intermediate/1001_cultivos_UPRA.parquet
