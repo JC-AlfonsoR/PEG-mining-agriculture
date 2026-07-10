@@ -40,7 +40,19 @@ This document tracks all datasets used in the project.
 	- En la sección de datos abiertos de la ANM se publica esta lista del histórico de los títulos mineros otorgados en Colombia
 	- Uso esta información para descargar todos los títulos mineros de la ANM como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)
 	- Los datos descargados de la ANM quedan en [2001_poligonos_titulosmineros.parquet](#datos-2001-poligonos-titulos-mineros)
+	- Se usa para generar los datos de [aad ANM Titulos Mineros Poligonos](#aad-anm-titulos-mineros-poligonos)
 
+## aad ANM Titulos Mineros Poligonos
+- **Type:** Raw
+- **Folder:** /data/intermediate/2001_poligonos_titulosmineros.parquet
+- **Source institution:** Agencia Nacional de Minería (ANM)
+- **Original source / URL:** Cada título minero se puede descargar desde el visor ANNA Minería de la ANM https://annamineria.anm.gov.co/Html5Viewer/index.html?viewer=SIGMExt&locale=es-CO&appAcronym=sigm
+- **Unit of observation** Titulo minero
+- **Date obtained:** 02-jul-2026
+- **Processing script:** [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py)
+- **Notes:**
+	- Como son más de 2000 poligonos de titulos mineros, estos no se descargan a mano sino que encontré la forma de comunicarme con el servidor de ARCGIS y descargarlos haiendole consultas como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)
+	- Para descargar los datos se usa la lista de titulos mineros: [ANM títulos mineros](#aac-anm-titulos-mineros)
 
 ## aba SGC Zonas Potenciales Minerales
 - **Type:** Raw
@@ -53,16 +65,17 @@ This document tracks all datasets used in the project.
 - **Notes:**
 	- En la sección de datos abiertos sobre minerales del Servicio GEológico Colombiano existen diferentes polígonos de estructuras geológicas.
 	- En este caso descargué los poligonos para todos los grupos minerales que definió el Servicio geológico Colombiano. En total son 7 grupos.
-	- Fue necesario hacer una armonización de las clasificaciones de los difenretes grupos minerales en las siguientes bases de datos:
+	- Fue necesario hacer una armonización de las clasificaciones de los diferentes grupos minerales en las siguientes bases de datos:
 		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
 		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
-		- aca Produccion legal asociada a regalías
+		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
+		- 
 		- ada Mineria ilegal
 	
 ## abb SGC Distritos Aluviales
 - **Type:** Raw
-- **Folder:** /data/raw/abb_abb_SGC_distritos_aluviales
-- **Source institution:** Servicio Geológico COlombiano
+- **Folder:** /data/raw/abb_SGC_distritos_aluviales
+- **Source institution:** Servicio Geológico Colombiano
 - **Original source / URL:** https://datos.sgc.gov.co/search?tags=Recursos%2520Minerales
 - **Date obtained:** 09-jul-2026
 - **Unit of observation** Zona de potencial mineral
@@ -70,11 +83,31 @@ This document tracks all datasets used in the project.
 - **Notes:**
 	- En la sección de datos abiertos sobre minerales del Servicio GEológico Colombiano existen diferentes polígonos de estructuras geológicas.
 	- En este caso descargué los poligonos de los distritos aluviales. Es importante distinguir entre minería de veta y minería de aluvión porque la actividad en aluvión tiende a ser más informal y a contaminar más.
-	- Fue necesario hacer una armonización de las clasificaciones de los difenretes grupos minerales en las siguientes bases de datos:
-		- abb Distritos Aluviales
-		- aba SGC Zonas Potenciales Minerales
-		- aca Produccion legal oro
-		- ada Mineria ilegal oro
+	- Fue necesario hacer una armonización de las clasificaciones de los diferentes grupos minerales en las siguientes bases de datos:
+		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
+		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
+		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
+		- ada Mineria ilegal
+
+
+## abc UPME Produccion regalias
+- **Type:** Raw
+- **Folder:** /data/raw/abc_UPME_produccionRegalias
+- **Source institution:** Agencia Nacional de MInería (ANM), Unidad de Planeación Minero Energética (UPME)
+- **Original source / URL:** https://www.upme.gov.co/simco/regalias/
+- **Date obtained:** 10-jul-2026
+- **Unit of observation** mes-mineral-municipio
+- **Processing script:** /engines/e2011_armonizar taxonomias_minerales.py
+- **Notes:**
+	- La producción asociada a regalías se puede desacrgar de dos fuentes:
+		- [ANM](https://www.anm.gov.co/informacion-del-sector-y-estadisticas?page=0): Descargar cada excel por separado
+		- [UPME](https://www.upme.gov.co/simco/regalias/): En la primera diapositiva del tablero de power BI, en la parte inferior derecha hay un ícono de excel que dice "descargar .xlsm"
+	- Descargué ambas bases de datos y corroboré que reportan los mismos valores. Sin embargo, los datos de la UPME están más actualizados, por eso decido usarlos.
+	- Fue necesario hacer una armonización de las clasificaciones de los diferentes grupos minerales en las siguientes bases de datos:
+		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
+		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
+		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
+		- ada Mineria ilegal
 
 
 ## Panel 1001 cultivos UPRA
@@ -88,11 +121,3 @@ This document tracks all datasets used in the project.
  	- Se crea a partir de los datos [aab UPRA](#aab-upra)
 
 
-## Datos 2001 Poligonos titulos mineros
-- **Type:** Intermediate
-- **Folder:** /data/intermediate/2001_poligonos_titulosmineros.parquet
-- **Source institution:** Agencia Nacional de Minería (ANM)
-- **Unit of observation** Titulo minero
-- **Processing script:** [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py)
-- **Notes:**
-	- Los poligonos de los titulos mineros se descargan de la ANM como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)

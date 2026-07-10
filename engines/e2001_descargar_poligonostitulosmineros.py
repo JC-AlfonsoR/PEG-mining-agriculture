@@ -104,5 +104,6 @@ def run():
     #######################################################
     #######################################################
     # Exportar resultado
-    gdf_final.to_parquet(DATA/"intermediate/2001_poligonos_titulosmineros.parquet")
-    gdf_final.to_excel(DATA/"intermediate/2001_poligonos_titulosmineros_ejemploN10.xlsx")
+    #gdf_final.to_parquet(DATA/"raw/aad_ANM_titulos_mineros_poligonos/2001_poligonos_titulosmineros.parquet")
+    gdf_final.to_excel(DATA/"raw/aad_ANM_titulos_mineros_poligonos/2001_poligonos_titulosmineros_ejemploN10.xlsx")
+    ""
