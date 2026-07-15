@@ -49,10 +49,19 @@ This document tracks all datasets used in the project.
 - **Original source / URL:** Cada título minero se puede descargar desde el visor ANNA Minería de la ANM https://annamineria.anm.gov.co/Html5Viewer/index.html?viewer=SIGMExt&locale=es-CO&appAcronym=sigm
 - **Unit of observation** Titulo minero
 - **Date obtained:** 02-jul-2026
-- **Processing script:** [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py)
+- **Processing script:**
+	- Descargar los poligonos: [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py)
+	- Armonizar bases de datos minerales: [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2011_armonizar_taxonomias_minerales.ipynb)
+
 - **Notes:**
 	- Como son más de 2000 poligonos de titulos mineros, estos no se descargan a mano sino que encontré la forma de comunicarme con el servidor de ARCGIS y descargarlos haiendole consultas como se detalla en [engines/e2001_descargar_poligonostitulosmineros.ipynb](../engines/e2001_descargar_poligonostitulosmineros.ipynb) (El script de python [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2001_descargar_poligonostitulosmineros.py) contiene la versión mínima pra ejcutarlo)
 	- Para descargar los datos se usa la lista de titulos mineros: [ANM títulos mineros](#aac-anm-titulos-mineros)
+	- Fue necesario hacer una armonización de las clasificaciones de los diferentes grupos minerales en las siguientes bases de datos:
+		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
+		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
+		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
+		- [ada SR 2021 (minería ilegal)](#ada-sr-2021)
+		- [aad ANM Titulos Mineros Poligonos](#aad-anm-titulos-mineros-poligonos)
 
 ## aba SGC Zonas Potenciales Minerales
 - **Type:** Raw
@@ -61,7 +70,8 @@ This document tracks all datasets used in the project.
 - **Original source / URL:** https://datos.sgc.gov.co/search?tags=Recursos%2520Minerales
 - **Date obtained:** 09-jul-2026
 - **Unit of observation** Zona de potencial mineral
-- **Processing script:** /engines/e2011_armonizar taxonomias_minerales.py
+- **Processing script:**
+	- Armonizar bases de datos minerales: [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2011_armonizar_taxonomias_minerales.ipynb)
 - **Notes:**
 	- En la sección de datos abiertos sobre minerales del Servicio GEológico Colombiano existen diferentes polígonos de estructuras geológicas.
 	- En este caso descargué los poligonos para todos los grupos minerales que definió el Servicio geológico Colombiano. En total son 7 grupos.
@@ -69,8 +79,8 @@ This document tracks all datasets used in the project.
 		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
 		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
 		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
-		- 
-		- ada Mineria ilegal
+		- [ada SR 2021 (minería ilegal)](#ada-sr-2021)
+		- [aad ANM Titulos Mineros Poligonos](#aad-anm-titulos-mineros-poligonos)
 	
 ## abb SGC Distritos Aluviales
 - **Type:** Raw
@@ -79,7 +89,8 @@ This document tracks all datasets used in the project.
 - **Original source / URL:** https://datos.sgc.gov.co/search?tags=Recursos%2520Minerales
 - **Date obtained:** 09-jul-2026
 - **Unit of observation** Zona de potencial mineral
-- **Processing script:** /engines/e2011_armonizar taxonomias_minerales.py
+- **Processing script:**
+	- Armonizar bases de datos minerales: [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2011_armonizar_taxonomias_minerales.ipynb)
 - **Notes:**
 	- En la sección de datos abiertos sobre minerales del Servicio GEológico Colombiano existen diferentes polígonos de estructuras geológicas.
 	- En este caso descargué los poligonos de los distritos aluviales. Es importante distinguir entre minería de veta y minería de aluvión porque la actividad en aluvión tiende a ser más informal y a contaminar más.
@@ -87,7 +98,7 @@ This document tracks all datasets used in the project.
 		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
 		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
 		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
-		- ada Mineria ilegal
+		- [ada SR 2021 (minería ilegal)](#ada-sr-2021)
 
 
 ## abc UPME Produccion regalias
@@ -97,9 +108,10 @@ This document tracks all datasets used in the project.
 - **Original source / URL:** https://www.upme.gov.co/simco/regalias/
 - **Date obtained:** 10-jul-2026
 - **Unit of observation** mes-mineral-municipio
-- **Processing script:** /engines/e2011_armonizar taxonomias_minerales.py
+- **Processing script:**
+	- Armonizar bases de datos minerales: [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2011_armonizar_taxonomias_minerales.ipynb)
 - **Notes:**
-	- La producción asociada a regalías se puede desacrgar de dos fuentes:
+	- La producción asociada a regalías se puede descargar de dos fuentes:
 		- [ANM](https://www.anm.gov.co/informacion-del-sector-y-estadisticas?page=0): Descargar cada excel por separado
 		- [UPME](https://www.upme.gov.co/simco/regalias/): En la primera diapositiva del tablero de power BI, en la parte inferior derecha hay un ícono de excel que dice "descargar .xlsm"
 	- Descargué ambas bases de datos y corroboré que reportan los mismos valores. Sin embargo, los datos de la UPME están más actualizados, por eso decido usarlos.
@@ -107,7 +119,26 @@ This document tracks all datasets used in the project.
 		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
 		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
 		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
-		- ada Mineria ilegal
+		- [ada SR 2021 (minería ilegal)](#ada-sr-2021)
+
+
+## ada SR 2021
+- **Type:** Raw
+- **Folder:** /data/raw/ada_SR2021
+- **Source institution:** Saavedra & Romero 2021
+- **Original source / URL:** https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/NML0MG
+- **Date obtained:** 10-jul-2026
+- **Unit of observation** 
+- **Processing script:**
+	- Armonizar bases de datos minerales: [engines/e2001_descargar_poligonostitulosmineros.py](../engines/e2011_armonizar_taxonomias_minerales.ipynb)
+- **Notes:**
+	- Este es un archivo tomado del repositorio de Saavedra & Romero 2021. En ese repositorio, el archivo está en _CreatedData/Temporary/panel_prillegalMi.dta_
+	- Fue necesario hacer una armonización de las clasificaciones de los diferentes grupos minerales en las siguientes bases de datos:
+		- [abb Distritos Aluviales](#abb-sgc-distritos-aluviales)
+		- [aba SGC Zonas Potenciales Minerales](#aba-sgc-zonas-potenciales-minerales)
+		- [abc UPME Produccion (legal) regalias](#upme-produccion-regalias)
+		- [ada SR 2021 (minería ilegal)](#ada-sr-2021)
+
 
 
 ## Panel 1001 cultivos UPRA
