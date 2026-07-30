@@ -7,8 +7,8 @@ UPRA_antiguo[UPRA 2019-2024]
 UPRA_nuevo[UPRA 2019-2024]
 ANM_web[ANM: Servidor ArcGIS]
 ANM_titulos_mineros[ANM: títulos mineros]
-2001_poligonos_titulosmineros[data/raw/
-2001_poligonos
+e2001_poligonos_titulosmineros[data/raw/
+e2001_poligonos
 titulosmineros]
 SGC_zonas_potencial[SGC:
 zonas potencial mineral]
@@ -23,9 +23,18 @@ DANE_poligonos_municipales[DANE:
 poligonos municipales]
 
 %% Bases de datos intermedias
-1001_panel_cultivos_UPRA[data/intermediate/
-1001_panel_cultivos_UPRA]
-
+e1001_panel_cultivos_UPRA[data/intermediate/
+e1001_panel_cultivos_UPRA]
+e2011_poligonos_titulosmineros_armonizado[data/intermediate/
+e2011_ANM_poligonosTitulosMineros]
+e2011_SGC_ZonasPotencialMineral_armonizado[data/intermediate/
+e2011_SGC_ZonasPotencialMineral_armonizado]
+e2011_SGC_Aluviones_armonizado[data/intermediate/
+e2011_SGC_Aluviones_armonizado]
+e2011_UPME_produccionRegalias[data/intermediate/
+e2011_UPME_produccionRegalias_armonizado]
+e2011_SR2021_mineriaIlegal[data/intermediate/
+e2011_SR2021_mineriaIlegal_armonizado]
 
 %% archivos de configuracion
 1001_2_crosswalk_armonizado[data/config/
@@ -44,12 +53,7 @@ poligonos titulos mineros}
 e2011_armonizar_taxonomias_minerales{e2011
 armonizar taxonomias
 minerales}
-e2101_calcular_instrumento_potencial{e2101
-calcular instrumento 
-a Zonas de Potencial}
-e2102_calcular_instrumento_aluvion{e2102
-calcular instrumento 
-a Aluvion}
+
 
 
 %% conexiones
@@ -58,31 +62,26 @@ a Aluvion}
 %% e1001_processs_UPRA
 UPRA_antiguo---e1001_processs_UPRA
 UPRA_nuevo---e1001_processs_UPRA
-e1001_processs_UPRA---1001_panel_cultivos_UPRA
+e1001_processs_UPRA---e1001_panel_cultivos_UPRA
 e1001_processs_UPRA---1001_2_crosswalk_armonizado
 
 
 %% e2001_descargar_poligonostitulosmineros
 ANM_web---e2001_descargar_poligonostitulosmineros
 ANM_titulos_mineros---e2001_descargar_poligonostitulosmineros
-e2001_descargar_poligonostitulosmineros---2001_poligonos_titulosmineros
+e2001_descargar_poligonostitulosmineros---e2001_poligonos_titulosmineros
 
 %% e2011_armonizar_taxonomias_minerales
-2001_poligonos_titulosmineros---e2011_armonizar_taxonomias_minerales
+e2001_poligonos_titulosmineros---e2011_armonizar_taxonomias_minerales
 SGC_zonas_potencial---e2011_armonizar_taxonomias_minerales
 SGC_aluviones---e2011_armonizar_taxonomias_minerales
 UPME_produccion_regalias---e2011_armonizar_taxonomias_minerales
 SR2021_mineria_ilegal---e2011_armonizar_taxonomias_minerales
 e2011_armonizar_taxonomias_minerales---2011_crosswalk_minerales_armonizado
-
-%% e2101_calcular_instrumento_potencial
-2011_crosswalk_minerales_armonizado---e2101_calcular_instrumento_potencial
-DANE_poligonos_municipales---e2101_calcular_instrumento_potencial
-SGC_zonas_potencial---e2101_calcular_instrumento_potencial
-
-%% e2102_calcular_instrumento_aluvion
-2011_crosswalk_minerales_armonizado---e2102_calcular_instrumento_aluvion
-DANE_poligonos_municipales---e2102_calcular_instrumento_aluvion
-SGC_aluviones---e2102_calcular_instrumento_aluvion
+e2011_armonizar_taxonomias_minerales---e2011_poligonos_titulosmineros_armonizado
+e2011_armonizar_taxonomias_minerales---e2011_SGC_ZonasPotencialMineral_armonizado
+e2011_armonizar_taxonomias_minerales---e2011_SGC_Aluviones_armonizado
+e2011_armonizar_taxonomias_minerales---e2011_UPME_produccionRegalias
+e2011_armonizar_taxonomias_minerales---e2011_SR2021_mineriaIlegal
 
 ```

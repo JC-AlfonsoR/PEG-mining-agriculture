@@ -79,13 +79,13 @@ def run():
               'notas']] = ""
     
     # Exporto los datos para revisarlos manualmente y definir la armonización de las categorías
-    plantilla.to_excel(DATA/ 'config/1001_1_plantilla_crosswalk.xlsx', index=False)
+    plantilla.to_excel(DATA/ 'config/e1001_crosswalk_cultivos.xlsx', index=False)
     
     #######################################################
     #######################################################
     # Armonizar Taxonomías
     # Cargar clasificación que fue armonizada a mano
-    clasificacion_armonizada = pd.read_excel(DATA/"config/1001_2_crosswalk_armonizado.xlsx",
+    clasificacion_armonizada = pd.read_excel(DATA/"config/e1001_crosswalk_cultivos_armonizado.xlsx",
                                             sheet_name="Sheet1")
     print(MSC_SEPARADOR, "\nArchivo de clasificación armonizada")
     print(clasificacion_armonizada.head(2))
@@ -464,4 +464,4 @@ def run():
 
     #######################################################
     ### Exportar Panel
-    panel_cultivos.to_parquet(DATA/'intermediate/1001_panel_cultivos_UPRA.parquet')
+    panel_cultivos.to_parquet(DATA/'intermediate/e1001_panel_cultivos_UPRA.parquet')
