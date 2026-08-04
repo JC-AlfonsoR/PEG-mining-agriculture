@@ -1,4 +1,4 @@
-# Esquema general
+# Esquema procesamiento de datos
 ```mermaid
 flowchart LR
 
@@ -36,6 +36,10 @@ e2011_UPME_produccionRegalias_armonizado]
 e2011_SR2021_mineriaIlegal[data/intermediate/
 e2011_SR2021_mineriaIlegal_armonizado]
 
+%% Bases de datos intermedias para STATA
+e2100_panel_IndicadoresGeoEspaciales_Minerales[data/intermediate/
+e2100_panel_IndicadoresGeoEspaciales_Minerales]
+
 %% archivos de configuracion
 1001_2_crosswalk_armonizado[data/config/
 1001_2_crosswalk_armonizado]
@@ -53,7 +57,9 @@ poligonos titulos mineros}
 e2011_armonizar_taxonomias_minerales{e2011
 armonizar taxonomias
 minerales}
-
+e2100_calcular_indicadoresGeoEspaciales_minerales{e2100
+Calcular Indicadores Geoespaciales
+de Minerales}
 
 
 %% conexiones
@@ -84,4 +90,23 @@ e2011_armonizar_taxonomias_minerales---e2011_SGC_Aluviones_armonizado
 e2011_armonizar_taxonomias_minerales---e2011_UPME_produccionRegalias
 e2011_armonizar_taxonomias_minerales---e2011_SR2021_mineriaIlegal
 
+%% e2100_calcular_instrumentos_potencial
+e2011_SGC_ZonasPotencialMineral_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
+e2011_SGC_Aluviones_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
+DANE_poligonos_municipales---e2100_calcular_indicadoresGeoEspaciales_minerales
+e2011_poligonos_titulosmineros_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
+e2100_calcular_indicadoresGeoEspaciales_minerales---e2100_panel_IndicadoresGeoEspaciales_Minerales
 ```
+
+# Estructura de los paneles de datos
+| Columna | Descripción |
+|----------|-------------|
+| `codigo_dane_municipio` | Código DANE de 5 dígitos del municipio. |
+| `anno` | Año de referencia de la observación. |
+| `nombre_variable` | Nombre interno de la variable. |
+| `variable_sujeto` | Sujeto o producto al que hace referencia la variable (ej. `cafe`). |
+| `variable_medicion` | Tipo de medición (ej. `produccion_ton`, `area_sembrada_ha`). |
+| `variable_detalle` | Desagregación adicional de la variable, cuando aplica. |
+| `variable_descripcion` | Descripción legible de la variable. |
+| `valor` | Valor numérico de la observación. |
+| `clasificacion_econometria` | Clasificación de la variable según su uso en los modelos econométricos. |

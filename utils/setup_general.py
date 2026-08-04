@@ -24,6 +24,11 @@ import warnings
 # revisar avance de ciclos
 from tqdm import tqdm
 
+# Manejar fechas y medir tiempo
+import datetime # Manejar fechas
+import time # Medir tiempos de ejecución
+
+
 # Paths
 from utils.paths import *
 
