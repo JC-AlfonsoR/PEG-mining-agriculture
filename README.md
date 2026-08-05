@@ -2,6 +2,7 @@
 - Las bases de datos se muestran con recuadros
     - Las resaltadas en rojo ya tienen la estructura de panel que se muestra en la siguiente sección
 - Los scripts de Python se muestran con rombos
+- Los scripts de Stata se muestran como círculos
 
 ```mermaid
 flowchart LR
@@ -71,8 +72,8 @@ Calcular Indicadores Geoespaciales
 de Minerales}
 e2101_organizar_informacionAdicional_minerales{e2101
 Organizar Información Adicional de Minerales}
-e900_correr_primera_etapa{e900 
-Correr primera etapa STATA}
+e900_correr_primera_etapa((e900 
+Correr primera etapa STATA))
 
 %% conexiones
 
