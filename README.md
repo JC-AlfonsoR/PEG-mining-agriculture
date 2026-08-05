@@ -1,9 +1,16 @@
 # Esquema procesamiento de datos
+- Las bases de datos se muestran con recuadros
+    - Las resaltadas en rojo ya tienen la estructura de panel que se muestra en la siguiente sección
+- Los scripts de Python se muestran con rombos
+
 ```mermaid
 flowchart LR
 
+%% Estilos
+classDef base_para_stata stroke:#f00
+
 %% Bases de datos crudas
-UPRA_antiguo[UPRA 2019-2024]
+UPRA_antiguo[UPRA 2007-2018]
 UPRA_nuevo[UPRA 2019-2024]
 ANM_web[ANM: Servidor ArcGIS]
 ANM_titulos_mineros[ANM: títulos mineros]
@@ -23,8 +30,6 @@ DANE_poligonos_municipales[DANE:
 poligonos municipales]
 
 %% Bases de datos intermedias
-e1001_panel_cultivos_UPRA[data/intermediate/
-e1001_panel_cultivos_UPRA]
 e2011_poligonos_titulosmineros_armonizado[data/intermediate/
 e2011_ANM_poligonosTitulosMineros]
 e2011_SGC_ZonasPotencialMineral_armonizado[data/intermediate/
@@ -37,8 +42,12 @@ e2011_SR2021_mineriaIlegal[data/intermediate/
 e2011_SR2021_mineriaIlegal_armonizado]
 
 %% Bases de datos intermedias para STATA
+e1001_panel_cultivos_UPRA[data/intermediate/
+e1001_panel_cultivos_UPRA]:::base_para_stata
 e2100_panel_IndicadoresGeoEspaciales_Minerales[data/intermediate/
-e2100_panel_IndicadoresGeoEspaciales_Minerales]
+e2100_panel_IndicadoresGeoEspaciales_Minerales]:::base_para_stata
+e2101_panel_InfoAdicional_Minerales[data/intermediate/
+e2101_panel_InfoAdicional_Minerales]:::base_para_stata
 
 %% archivos de configuracion
 1001_2_crosswalk_armonizado[data/config/
@@ -60,7 +69,10 @@ minerales}
 e2100_calcular_indicadoresGeoEspaciales_minerales{e2100
 Calcular Indicadores Geoespaciales
 de Minerales}
-
+e2101_organizar_informacionAdicional_minerales{e2101
+Organizar Información Adicional de Minerales}
+e900_correr_primera_etapa{e900 
+Correr primera etapa STATA}
 
 %% conexiones
 
@@ -96,6 +108,18 @@ e2011_SGC_Aluviones_armonizado---e2100_calcular_indicadoresGeoEspaciales_mineral
 DANE_poligonos_municipales---e2100_calcular_indicadoresGeoEspaciales_minerales
 e2011_poligonos_titulosmineros_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
 e2100_calcular_indicadoresGeoEspaciales_minerales---e2100_panel_IndicadoresGeoEspaciales_Minerales
+
+
+%% Organizar información adicional de minerales
+e2011_SR2021_mineriaIlegal---e2101_organizar_informacionAdicional_minerales
+e2011_UPME_produccionRegalias---e2101_organizar_informacionAdicional_minerales
+e2101_organizar_informacionAdicional_minerales---e2101_panel_InfoAdicional_Minerales
+
+
+%% Primera etapa STATA
+e2101_panel_InfoAdicional_Minerales---e900_correr_primera_etapa
+e2100_panel_IndicadoresGeoEspaciales_Minerales---e900_correr_primera_etapa
+
 ```
 
 # Estructura de los paneles de datos
