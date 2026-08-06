@@ -72,8 +72,8 @@ Calcular Indicadores Geoespaciales
 de Minerales}
 e2101_organizar_informacionAdicional_minerales{e2101
 Organizar Información Adicional de Minerales}
-e900_correr_primera_etapa((e900 
-Correr primera etapa STATA))
+e800_explorar_primera_etapa((e800 
+Explorar primera etapa))
 
 %% conexiones
 
@@ -118,8 +118,8 @@ e2101_organizar_informacionAdicional_minerales---e2101_panel_InfoAdicional_Miner
 
 
 %% Primera etapa STATA
-e2101_panel_InfoAdicional_Minerales---e900_correr_primera_etapa
-e2100_panel_IndicadoresGeoEspaciales_Minerales---e900_correr_primera_etapa
+e2101_panel_InfoAdicional_Minerales---e800_explorar_primera_etapa
+e2100_panel_IndicadoresGeoEspaciales_Minerales---e800_explorar_primera_etapa
 
 ```
 
