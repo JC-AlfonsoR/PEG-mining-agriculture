@@ -41,5 +41,8 @@ from utils.save_diagnostic import*
 # Miscelaneos
 from utils.miscellaneous import *
 
+# Abreviaciones definidas para generar nombres de variables en STATA
+from utils.diccionarios_abreviaciones import *
+
 # helper print
 print("Setup general cargado")

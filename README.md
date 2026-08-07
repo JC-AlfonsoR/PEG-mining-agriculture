@@ -1,6 +1,6 @@
 # Esquema procesamiento de datos
 - Las bases de datos se muestran con recuadros
-    - Las resaltadas en rojo ya tienen la estructura de panel que se muestra en la siguiente sección
+    - Las resaltadas en rojo tinen están en el fromato panel que se muestra en la siguiente sección y en ```.dta``` para cargarlas en Stata
 - Los scripts de Python se muestran con rombos
 - Los scripts de Stata se muestran como círculos
 
@@ -72,7 +72,7 @@ Calcular Indicadores Geoespaciales
 de Minerales}
 e2101_organizar_informacionAdicional_minerales{e2101
 Organizar Información Adicional de Minerales}
-e800_explorar_primera_etapa((e800 
+e8000_explorar_primera_etapa((e8000 
 Explorar primera etapa))
 
 %% conexiones
@@ -118,8 +118,8 @@ e2101_organizar_informacionAdicional_minerales---e2101_panel_InfoAdicional_Miner
 
 
 %% Primera etapa STATA
-e2101_panel_InfoAdicional_Minerales---e800_explorar_primera_etapa
-e2100_panel_IndicadoresGeoEspaciales_Minerales---e800_explorar_primera_etapa
+e2101_panel_InfoAdicional_Minerales---e8000_explorar_primera_etapa
+e2100_panel_IndicadoresGeoEspaciales_Minerales---e8000_explorar_primera_etapa
 
 ```
 
