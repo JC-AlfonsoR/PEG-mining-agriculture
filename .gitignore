@@ -66,3 +66,4 @@ utils/__pycache__/paths.cpython-312.pyc
 engines/.ipynb_checkpoints
 .ipynb_checkpoints/
 /Efforts
+*.stswp
