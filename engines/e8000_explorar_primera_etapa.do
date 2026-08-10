@@ -184,21 +184,29 @@ local mineria_ilegal mineIleg_oro_nwPrp_SR21_pct
 
 *******************************************************
 **# Sección Transversal
-*    ┏━┓┏━╸┏━╸    ╺┳╸┏━┓┏━┓┏┓╻┏━┓╻ ╻┏━╸┏━┓┏━┓┏━┓╻  
-*    ┗━┓┣╸ ┃       ┃ ┣┳┛┣━┫┃┗┫┗━┓┃┏┛┣╸ ┣┳┛┗━┓┣━┫┃  
-*    ┗━┛┗━╸┗━╸╹    ╹ ╹┗╸╹ ╹╹ ╹┗━┛┗┛ ┗━╸╹┗╸┗━┛╹ ╹┗━╸
+*      ▄▄▄▄               ▄▄▄▄▄▄▄                                          
+*     █▀   ▀                 █     ▄ ▄▄   ▄▄▄   ▄ ▄▄    ▄▄▄   ▄   ▄        
+*     ▀█▄▄▄                  █     █▀  ▀ ▀   █  █▀  █  █   ▀  ▀▄ ▄▀        
+*         ▀█                 █     █     ▄▀▀▀█  █   █   ▀▀▀▄   █▄█         
+*     ▀▄▄▄█▀   █             █     █     ▀▄▄▀█  █   █  ▀▄▄▄▀    █      █   
 *******************************************************
 * Voy a probar la primera etapa en cada uno de los años disponibles
-
+* Busco responder a la pregunta ¿Los municipios con mayor potencial aurífero 
+* presentan, en promedio, mayor actividad minera legal?
 
 *******************************************************
-* Minería legal
+**## Minería Legal
+*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
 *******************************************************
 * La especificacion principal es con 
 * Potencial: proximidad_potencial_roca 
 * Produccion legal: log_mineLegl_oro_prod_gr
 
 
+*******************************************************
+**### Roca
 *******************************************************
 * Explorar los cortes transversales de cada año
 * Minería legal explicada por Potencial de roca
@@ -240,8 +248,8 @@ preserve
 
 restore
 
-
-
+*******************************************************
+**### Aluvion + Roca
 *******************************************************
 * Explorar los cortes transversales de cada año
 * Minería legal explicada por Potencial de roca y potencial de aluvion
@@ -290,13 +298,19 @@ restore
 
 
 *******************************************************
-* Minería Ilegal
+**## Minería Ilegal
+*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻   ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃╺━╸┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
 *******************************************************
 
 * La especificacion principal es con 
 * Potencial: proximidad_potencial_aluvion
 * Produccion ilegal: mineIleg_oro_nwPrp_SR21_pct
 
+*******************************************************
+**### Aluvion
+*******************************************************
 
 * Explorar los cortes transversales de cada año
 preserve
@@ -338,6 +352,9 @@ preserve
 restore
 
 
+*******************************************************
+**### Aluvion + Roca
+*******************************************************
 
 * Explorar los cortes transversales de cada año
 * Minería ilegal explicada por Potencial de roca y potencial de aluvion
@@ -386,10 +403,12 @@ restore
 
 
 *******************************************************
-*# Primera Etapa - Oro - Panel
-*    ┏━┓┏━┓┏┓╻┏━╸╻  
-*    ┣━┛┣━┫┃┗┫┣╸ ┃  
-*    ╹  ╹ ╹╹ ╹┗━╸┗━╸
+**# Panel
+*     ▄▄▄▄▄                       ▀▀█   
+*     █   ▀█  ▄▄▄   ▄ ▄▄    ▄▄▄     █   
+*     █▄▄▄█▀ ▀   █  █▀  █  █▀  █    █   
+*     █      ▄▀▀▀█  █   █  █▀▀▀▀    █   
+*     █      ▀▄▄▀█  █   █  ▀█▄▄▀    ▀▄▄ 
 *******************************************************
 
 
@@ -397,6 +416,5 @@ restore
 
 *******************************************************
 * Minería legal
-* Busco responder a la pregunta ¿Los municipios con mayor potencial aurífero 
-* presentan, en promedio, mayor actividad minera legal?
+
 *******************************************************

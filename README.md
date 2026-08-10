@@ -29,6 +29,9 @@ SR2021_mineria_ilegal[SR2021
 minería ilegal]
 DANE_poligonos_municipales[DANE:
 poligonos municipales]
+WB_pinkSheet_preciosMateriasPrimas[World Bank
+Pink Sheet:
+Precios Materias Primas]
 
 %% Bases de datos intermedias
 e2011_poligonos_titulosmineros_armonizado[data/intermediate/
@@ -41,6 +44,11 @@ e2011_UPME_produccionRegalias[data/intermediate/
 e2011_UPME_produccionRegalias_armonizado]
 e2011_SR2021_mineriaIlegal[data/intermediate/
 e2011_SR2021_mineriaIlegal_armonizado]
+e2011_WbPinkSheet_preciosMinerales_armonizado[data/intermediate/e2011
+World Bank - Pink Sheet
+Precios Minerales armonizado]
+
+
 
 %% Bases de datos intermedias para STATA
 e1001_panel_cultivos_UPRA[data/intermediate/
@@ -49,6 +57,8 @@ e2100_panel_IndicadoresGeoEspaciales_Minerales[data/intermediate/
 e2100_panel_IndicadoresGeoEspaciales_Minerales]:::base_para_stata
 e2101_panel_InfoAdicional_Minerales[data/intermediate/
 e2101_panel_InfoAdicional_Minerales]:::base_para_stata
+e3000_preciosMinerales[data/intermediate/
+e3000 Precios de minerales]:::base_para_stata
 
 %% archivos de configuracion
 1001_2_crosswalk_armonizado[data/config/
@@ -72,6 +82,8 @@ Calcular Indicadores Geoespaciales
 de Minerales}
 e2101_organizar_informacionAdicional_minerales{e2101
 Organizar Información Adicional de Minerales}
+e3000_procesarPreciosMinerales{e3000
+Procesar Precios de minerales}
 e8000_explorar_primera_etapa((e8000 
 Explorar primera etapa))
 
@@ -96,12 +108,15 @@ SGC_zonas_potencial---e2011_armonizar_taxonomias_minerales
 SGC_aluviones---e2011_armonizar_taxonomias_minerales
 UPME_produccion_regalias---e2011_armonizar_taxonomias_minerales
 SR2021_mineria_ilegal---e2011_armonizar_taxonomias_minerales
+WB_pinkSheet_preciosMateriasPrimas---e2011_armonizar_taxonomias_minerales
+
 e2011_armonizar_taxonomias_minerales---2011_crosswalk_minerales_armonizado
 e2011_armonizar_taxonomias_minerales---e2011_poligonos_titulosmineros_armonizado
 e2011_armonizar_taxonomias_minerales---e2011_SGC_ZonasPotencialMineral_armonizado
 e2011_armonizar_taxonomias_minerales---e2011_SGC_Aluviones_armonizado
 e2011_armonizar_taxonomias_minerales---e2011_UPME_produccionRegalias
 e2011_armonizar_taxonomias_minerales---e2011_SR2021_mineriaIlegal
+e2011_armonizar_taxonomias_minerales---e2011_WbPinkSheet_preciosMinerales_armonizado
 
 %% e2100_calcular_instrumentos_potencial
 e2011_SGC_ZonasPotencialMineral_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
@@ -116,10 +131,14 @@ e2011_SR2021_mineriaIlegal---e2101_organizar_informacionAdicional_minerales
 e2011_UPME_produccionRegalias---e2101_organizar_informacionAdicional_minerales
 e2101_organizar_informacionAdicional_minerales---e2101_panel_InfoAdicional_Minerales
 
+%% Precios de minerales
+e2011_WbPinkSheet_preciosMinerales_armonizado---e3000_procesarPreciosMinerales
+e3000_procesarPreciosMinerales---e3000_preciosMinerales
 
 %% Primera etapa STATA
 e2101_panel_InfoAdicional_Minerales---e8000_explorar_primera_etapa
 e2100_panel_IndicadoresGeoEspaciales_Minerales---e8000_explorar_primera_etapa
+e3000_preciosMinerales---e8000_explorar_primera_etapa
 
 ```
 
