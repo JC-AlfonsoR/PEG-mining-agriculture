@@ -106,7 +106,7 @@ use ///
 * Revisar el rango de años de los datos en el panel
 tabulate anno
 
-* Incluir el potencial mineral invariante
+* Incluir el potencial mineral invariante en el municipio
 *******************************************************
 * El panel que tengo es (municipio, año). Los datos en potencial_oro solo
 * estan identificados por municipio. Entonces, el merge replica el valor
@@ -115,6 +115,7 @@ merge m:1 codigo_dane_municipio using "`potencial_oro'"
 
 * Convervar solo los datos de _merge==3
 keep if _merge==3
+drop _merge
 
 
 *******************************************************
@@ -160,7 +161,7 @@ bysort anno: summarize mineLegl_oro_pRegls_prod_gr log_mineLegl_oro_prod_gr mine
 
 
 *******************************************************
-**# Definir especificaciones principal
+**# Especificaciones principal
 *    ┏━╸┏━┓┏━┓┏━╸┏━╸    ┏━┓┏━┓╻┏┓╻┏━╸╻┏━┓┏━┓╻  
 *    ┣╸ ┗━┓┣━┛┣╸ ┃      ┣━┛┣┳┛┃┃┗┫┃  ┃┣━┛┣━┫┃  
 *    ┗━╸┗━┛╹  ┗━╸┗━╸╹   ╹  ╹┗╸╹╹ ╹┗━╸╹╹  ╹ ╹┗━╸
@@ -181,6 +182,14 @@ local potencial_mineral_aluvion proximidad_potencial_aluvion
 * mineIleg_oro_area_SR21_km2 mineIleg_oro_nwPrp_SR21_pct mineIleg_oro_prpMun_SR21_pct
 local mineria_ilegal mineIleg_oro_nwPrp_SR21_pct
 
+
+* La especifciacion principal es con el precio promedio anual
+* El precio anual max y min se usarán para revisar hipotesis de auge/declive
+local precio_mineral precMine_oro_prmdio_oro_USoz
+
+
+* Conservar solo las variables de interes
+keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal'
 
 *******************************************************
 **# Sección Transversal
@@ -244,7 +253,7 @@ preserve
     display "=========================================="
 	
 	* Mostrar valores
-	list anno n b_roca se pv_roca f_stat r2, noobs
+	list anno n b_roca se_roca pv_roca f_stat r2, noobs
 
 restore
 
@@ -401,7 +410,6 @@ restore
 
 
 
-
 *******************************************************
 **# Panel
 *     ▄▄▄▄▄                       ▀▀█   
@@ -411,10 +419,61 @@ restore
 *     █      ▀▄▄▀█  █   █  ▀█▄▄▀    ▀▄▄ 
 *******************************************************
 
+**## Estructurar datos panel
 
+
+ * Incluir el precio anual de los minerales
+*******************************************************
+* El panel que tengo es (municipio, año). Los datos en precios_minerales solo estan identificados por año. Entonces, el merge replica el valor del precio anual para cada municipio
+merge m:1 anno using "`data_intermediate'/e3000_precios_minerales.dta"
+
+* Analizar merge
+tab _merge
+*br if _merge==2
+* Las observaciones de _merge==2 son años desde 1960 hasta 2003.
+* En esos años hay datos de precios, pero no hay datos
+* mineria legal, minerai ilegal. Por eso se desechan esos datos
+keep if _merge==3
+drop _merge
+
+**### Crear instrumento de interacción Precio X Potencial
+
+* La especifciacion principal es con el precio promedio anual
+* El precio anual max y min se usarán para revisar hipotesis de auge/declive
+gen instr_potRoca_precio = `potencial_mineral_roca'*`precio_mineral'
+gen instr_potAluvion_precio = `potencial_mineral_aluvion'*`precio_mineral'
+
+
+
+* Conservar solo las variables de interes
+keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio
 
 
 *******************************************************
-* Minería legal
+**## Minería Legal
+*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
+*******************************************************
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_roca * Precio 
+* Produccion legal: log_mineLegl_oro_prod_gr * Precio
+
+reg `mineria_legal' instr_potRoca_precio
+reg `mineria_legal' instr_potAluvion_precio
+
 
 *******************************************************
+**## Minería Ilegal
+*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻   ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃╺━╸┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
+*******************************************************
+
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_aluvion * Precio
+* Produccion ilegal: mineIleg_oro_nwPrp_SR21_pct * Precio
+
+reg `mineria_ilegal' instr_potRoca_precio
+reg `mineria_ilegal' instr_potAluvion_precio
+
