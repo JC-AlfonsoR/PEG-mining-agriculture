@@ -448,6 +448,18 @@ gen instr_potAluvion_precio = `potencial_mineral_aluvion'*`precio_mineral'
 * Conservar solo las variables de interes
 keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio
 
+*******************************************************
+* Declarar el Panel
+
+* Crear identificador numérico del municipio
+egen id_municipio = group(codigo_dane_municipio), label
+
+* verificar que (municipio, año) sea único. Si no sale error, significa que los identificadores funcionar
+isid id_municipio anno
+
+* Declarar el Panel
+xtset id_municipio	anno
+
 
 *******************************************************
 **## Minería Legal
@@ -476,4 +488,57 @@ reg `mineria_legal' instr_potAluvion_precio
 
 reg `mineria_ilegal' instr_potRoca_precio
 reg `mineria_ilegal' instr_potAluvion_precio
+
+
+ *******************************************************                                       
+**# Efectos Fijos
+* ▄▄▄▄▄▄   ▄▀▀                  ▄                         ▄▄▄▄▄▄   ▀       ▀                
+* █      ▄▄█▄▄   ▄▄▄    ▄▄▄   ▄▄█▄▄   ▄▄▄    ▄▄▄          █      ▄▄▄     ▄▄▄    ▄▄▄    ▄▄▄  
+* █▄▄▄▄▄   █    █▀  █  █▀  ▀    █    █▀ ▀█  █   ▀         █▄▄▄▄▄   █       █   █▀ ▀█  █   ▀ 
+* █        █    █▀▀▀▀  █        █    █   █   ▀▀▀▄         █        █       █   █   █   ▀▀▀▄ 
+* █▄▄▄▄▄   █    ▀█▄▄▀  ▀█▄▄▀    ▀▄▄  ▀█▄█▀  ▀▄▄▄▀         █      ▄▄█▄▄     █   ▀█▄█▀  ▀▄▄▄▀ 
+*                                                                         █                
+*                                                                       ▀▀                 
+*******************************************************                                       
+
+
+
+ *******************************************************
+**## Minería Legal
+*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
+*******************************************************
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_roca * Precio 
+* Produccion legal: log_mineLegl_oro_prod_gr * Precio
+
+reghdfe `mineria_legal' instr_potRoca_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+reghdfe `mineria_legal' instr_potAluvion_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+
+
+*******************************************************
+**## Minería Ilegal
+*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻   ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃╺━╸┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
+*******************************************************
+
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_aluvion * Precio
+* Produccion ilegal: mineIleg_oro_nwPrp_SR21_pct * Precio
+
+reghdfe `mineria_ilegal' instr_potRoca_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+reghdfe `mineria_ilegal' instr_potAluvion_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
 
