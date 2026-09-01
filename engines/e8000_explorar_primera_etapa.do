@@ -55,7 +55,13 @@ set more off
 * Configuración
 *******************************************************
 * Raíz del proyecto
-cd "C:/Users/jcalf/OneDrive - Universidad de los Andes/PEG/PEG-mining-agriculture"
+local computador=c(username)
+if "`computador'"=="jcalf" {
+	cd "C:/Users/jcalf/OneDrive - Universidad de los Andes/PEG/PEG-mining-agriculture"
+}
+if "`computador'"=="javie" {
+	cd "C:/Users/javie/OneDrive - Universidad de los andes/PEG/PEG-mining-agriculture"
+}
 
 * Verificación
 pwd
@@ -113,13 +119,13 @@ tabulate anno
 * del potencial del municipio en cada año
 merge m:1 codigo_dane_municipio using "`potencial_oro'"
 
-* Convervar solo los datos de _merge==3
+* Conservar solo los datos de _merge==3
 keep if _merge==3
 drop _merge
 
 
 *******************************************************
-**# Convertir datos
+**# Transformar variables
 *    ╺┳╸┏━┓┏━┓┏┓╻┏━┓┏━╸┏━┓┏━┓┏┳┓┏━┓┏━┓   ╻ ╻┏━┓┏━┓╻┏━┓┏┓ ╻  ┏━╸┏━┓
 *     ┃ ┣┳┛┣━┫┃┗┫┗━┓┣╸ ┃ ┃┣┳┛┃┃┃┣━┫┣┳┛   ┃┏┛┣━┫┣┳┛┃┣━┫┣┻┓┃  ┣╸ ┗━┓
 *     ╹ ╹┗╸╹ ╹╹ ╹┗━┛╹  ┗━┛╹┗╸╹ ╹╹ ╹╹┗╸   ┗┛ ╹ ╹╹┗╸╹╹ ╹┗━┛┗━╸┗━╸┗━┛
@@ -161,6 +167,15 @@ bysort anno: summarize mineLegl_oro_pRegls_prod_gr log_mineLegl_oro_prod_gr mine
 
 
 *******************************************************
+**# Analizar Intención minería legal
+
+* Incorporar datos de titulos mineros
+merge 1:1 codigo_dane_municipio anno using "`data_intermediate'/e2100_panel_IndicadoresGeoEspaciales_Minerales.dta"
+
+* Calcular flujo total de area solicitada para mineria de oro en cada municipio-año
+gen tituMine_oro_AreaSo_total_m2Fx  = tituMine_oro_AreaSo_tGrn_m2Fx + tituMine_oro_AreaSo_tOtr_m2Fx 
+
+*******************************************************
 **# Especificaciones principal
 *    ┏━╸┏━┓┏━┓┏━╸┏━╸    ┏━┓┏━┓╻┏┓╻┏━╸╻┏━┓┏━┓╻  
 *    ┣╸ ┗━┓┣━┛┣╸ ┃      ┣━┛┣┳┛┃┃┗┫┃  ┃┣━┛┣━┫┃  
@@ -174,6 +189,7 @@ local potencial_mineral_roca proximidad_potencial_roca
 
 * Minería legal
 local mineria_legal log_mineLegl_oro_prod_gr
+local intencion_mineria_legal tituMine_oro_AreaSo_total_m2Fx
 
 * Potencial mineral en aluvion
 local potencial_mineral_aluvion proximidad_potencial_aluvion
@@ -189,7 +205,7 @@ local precio_mineral precMine_oro_prmdio_oro_USoz
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal'
+keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `intencion_mineria_legal'
 
 *******************************************************
 **# Sección Transversal
@@ -294,7 +310,8 @@ preserve
 
 	display "=========================================="
     display "Sección transversal para cada año"
-	display "X: Potencial mineral en roca medido como: `potencial_mineral_roca'"
+	display "X1: Potencial mineral en roca medido como: `potencial_mineral_roca'"
+	display "X2: Potencial mineral en aluvion medido como: `potencial_mineral_aluvion'"
 	display "Y: Minería legal medida como: `mineria_legal'"
     display "=========================================="
 	
@@ -304,6 +321,148 @@ preserve
 restore
 
 
+*******************************************************
+**## Intención M. legal
+*    ╻┏┓╻╺┳╸┏━╸┏┓╻┏━╸╻┏━┓┏┓╻   ┏┳┓    ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┗┫ ┃ ┣╸ ┃┗┫┃  ┃┃ ┃┃┗┫   ┃┃┃    ┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹╹ ╹ ╹ ┗━╸╹ ╹┗━╸╹┗━┛╹ ╹   ╹ ╹╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
+*******************************************************
+
+*******************************************************
+**### Aluvion
+*******************************************************
+* Explorar los cortes transversales de cada año
+* Intención de minería legal explicada por Potencial de roca y potencial de aluvion
+
+preserve
+	
+	* Eliminar datos faltantes
+	drop if missing(codigo_dane_municipio, `intencion_mineria_legal')
+
+	* Estimar una regresión transversal por año
+	statsby ///
+		b_aluv = _b[`potencial_mineral_aluvion'] ///
+		se_aluv = _se[`potencial_mineral_aluvion'] ///
+		n     = e(N) ///
+		f_stat = e(F) ///
+		r2    = e(r2) ///
+		df_r  = e(df_r), ///
+		by(anno) clear: ///
+		regress `intencion_mineria_legal' ///
+			`potencial_mineral_aluvion', ///
+			vce(robust)
+
+	* Valor p de H0: beta = 0
+	gen pv_aluv = 2 * ttail(df_r, abs(b_aluv / se_aluv))
+
+	* Eliminar variable auxiliar
+	drop df_r
+
+	* Formato y presentación
+	format f_stat r2  b_aluv pv_aluv se_aluv %9.4f
+
+	display "=========================================="
+    display "Sección transversal para cada año"
+	display "X: Potencial mineral en roca medido como: `potencial_mineral_aluvion'"
+	display "Y: Intención de Minería legal medida como: `intencion_mineria_legal'"
+    display "=========================================="
+	
+	* Mostrar valores
+	list anno n b_aluv se_aluv pv_aluv  f_stat r2, noobs
+
+restore
+
+
+*******************************************************
+**### Roca
+*******************************************************
+* Explorar los cortes transversales de cada año
+* Intención de minería legal explicada por Potencial de roca y potencial de aluvion
+preserve
+	
+	* Eliminar datos faltantes
+	drop if missing(codigo_dane_municipio, `intencion_mineria_legal')
+
+	* Estimar una regresión transversal por año
+	statsby ///
+		b_roca  = _b[`potencial_mineral_roca'] ///
+		se_roca    = _se[`potencial_mineral_roca'] ///
+		n     = e(N) ///
+		f_stat = e(F) ///
+		r2    = e(r2) ///
+		df_r  = e(df_r), ///
+		by(anno) clear: ///
+		regress `intencion_mineria_legal' ///
+			`potencial_mineral_roca', ///
+			vce(robust)
+
+	* Valor p de H0: b_roca = 0
+	gen pv_roca = 2 * ttail(df_r, abs(b_roca / se_roca))
+
+	* Eliminar variable auxiliar
+	drop df_r
+
+	* Formato y presentación
+	format b_roca se_roca f_stat r2 pv_roca %9.4f
+
+	display "=========================================="
+    display "Sección transversal para cada año"
+	display "X: Potencial mineral en roca medido como: `potencial_mineral_roca'"
+	display "Y: Intención de Minería legal medida como: `intencion_mineria_legal'"
+    display "=========================================="
+	
+	* Mostrar valores
+	list anno n b_roca se_roca pv_roca f_stat r2, noobs
+
+restore
+
+
+*******************************************************
+**### Aluvion + Roca
+*******************************************************
+* Explorar los cortes transversales de cada año
+* Minería legal explicada por Potencial de roca y potencial de aluvion
+preserve
+	
+	* Eliminar datos faltantes
+	drop if missing(codigo_dane_municipio, `intencion_mineria_legal')
+
+	* Estimar una regresión transversal por año
+	statsby ///
+		b_roca  = _b[`potencial_mineral_roca'] ///
+		se_roca    = _se[`potencial_mineral_roca'] ///
+		b_aluv = _b[`potencial_mineral_aluvion'] ///
+		se_aluv = _se[`potencial_mineral_aluvion'] ///
+		n     = e(N) ///
+		f_stat = e(F) ///
+		r2    = e(r2) ///
+		df_r  = e(df_r), ///
+		by(anno) clear: ///
+		regress `intencion_mineria_legal' ///
+			`potencial_mineral_roca' `potencial_mineral_aluvion', ///
+			vce(robust)
+
+	* Valor p de H0: beta = 0
+	gen pv_roca = 2 * ttail(df_r, abs(b_roca / se_roca))
+	gen pv_aluv = 2 * ttail(df_r, abs(b_aluv / se_aluv))
+
+	* Eliminar variable auxiliar
+	drop df_r
+
+	* Formato y presentación
+	format b_roca se_roca pv_roca f_stat r2  b_aluv pv_aluv se_aluv %9.4f
+
+	display "=========================================="
+    display "Sección transversal para cada año"
+	display "X1: Potencial mineral en roca medido como: `potencial_mineral_roca'"
+	display "X2: Potencial mineral en aluvion medido como: `potencial_mineral_aluvion'"
+	display "Y: Intención de Minería legal medida como: `intencion_mineria_legal'"
+    display "=========================================="
+	
+	* Mostrar valores
+	list anno n b_roca se_roca pv_roca b_aluv se_aluv pv_aluv  f_stat r2, noobs
+
+restore
 
 
 *******************************************************
@@ -399,7 +558,8 @@ preserve
 
 	display "=========================================="
     display "Sección transversal para cada año"
-	display "X: Potencial mineral en roca medido como: `potencial_mineral_aluvion'"
+	display "X1: Potencial mineral en roca medido como: `potencial_mineral_roca'"
+	display "X2: Potencial mineral en aluvion medido como: `potencial_mineral_aluvion'"
 	display "Y: Minería legal medida como: `mineria_ilegal'"
     display "=========================================="
 	
@@ -407,6 +567,7 @@ preserve
 	list anno n b_roca se_roca pv_roca b_aluv se_aluv pv_aluv  f_stat r2, noobs
 
 restore
+
 
 
 
@@ -542,3 +703,8 @@ reghdfe `mineria_ilegal' instr_potAluvion_precio, ///
 	absorb(id_municipio anno) ///
 	vce(cluster id_municipio)
 
+
+
+*****
+* Revisar conteo de observaciones de mineria legal e ilegal por año
+bysort anno: summarize `mineria_ilegal' `mineria_legal'
