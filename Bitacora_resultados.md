@@ -1,3 +1,27 @@
+## Exploración: Intención de hacer minería legal
+**Fecha:** 2 de septiembre de 2026  
+**Estado:** resultados exploratorios de primera etapa
+
+### Pregunta
+Como en el anterior análisis encontré que el potencial aurífero de roca predice tanto minería
+> Respuesta: El potencial aurifero de roca interactuado con el precio del oro predice tanto minería legal como ilegal
+
+### Resultados preliminares
+####  Panel con efectos fijos de municipio y año
+|  | log(1 + area solicitada título minero) |  | Minería ilegal |  |
+|---|---:|---:|---:|---:|
+| **Instrumento** | **Roca × P** | **Aluvión × P** | **Roca × P** | **Aluvión × P** |
+| Coeficiente | -0.00087*** | -0.00091*** | 0,012061*** | 0,007901*** |
+| Error estándar agrupado | (0.00013) | (0.00019) | (0,001774) | (0,002529) |
+| Estadístico t | -6.43 | -4.58 | 6,80 | 3,12 |
+| Valor p | <0.001 | <0,001 | <0,001 | 0,002 |
+| Estadístico F | 41.33 | 20.99 | 46,23 | 9,76 |
+| Observaciones | 11.538 | 11.538 | 12.012 | 12.012 |
+> Las regresiones absorben efectos fijos de municipio y año.
+
+### Análisis
+- El potencial de oro en roca o en aluvión mueve tanto la intención de hacer minería legal (medida como área solicitada de título minero) como la minería ilegal (medida como porcentaje del area minada que se mina ilegalmente)
+- No encuentro instrumentos que muevan solo una de las variables. ¿proceder con instrumento de potencial sobre minería ilegal y controlar por intención de ahcer minería legal o viceversa?
 
 ## Exploración: potencial aurífero, minería legal e ilegal
 
@@ -7,6 +31,9 @@
 ### Pregunta
 ¿El potencial aurífero de roca predice principalmente la minería legal,
 mientras que el potencial de aluvión predice principalmente la minería ilegal?
+> Respuesta: 
+> 1. Ninguno de los instrumentos elegidos (potencial en aluvión o en oro) tiene potencial para predecir el indicador de minería legal (producción asociada a regalías)
+> 1. El potencial aurifero de roca interactuado con el precio del oro tiene poder para predecir minería ilegal. El potencial aurifero de aluvión también, pero es más bajo.
 
 ### Hipótesis
 ```mermaid
