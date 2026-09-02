@@ -168,15 +168,23 @@ bysort anno: summarize mineLegl_oro_pRegls_prod_gr log_mineLegl_oro_prod_gr mine
 
 *******************************************************
 **# Analizar Intención minería legal
+*    ╻┏┓╻╺┳╸┏━╸┏┓╻┏━╸╻┏━┓┏┓╻   ┏┳┓    ╻  ┏━╸┏━╸┏━┓╻  
+*    ┃┃┗┫ ┃ ┣╸ ┃┗┫┃  ┃┃ ┃┃┗┫   ┃┃┃    ┃  ┣╸ ┃╺┓┣━┫┃  
+*    ╹╹ ╹ ╹ ┗━╸╹ ╹┗━╸╹┗━┛╹ ╹   ╹ ╹╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
+*******************************************************
 
 * Incorporar datos de titulos mineros
 merge 1:1 codigo_dane_municipio anno using "`data_intermediate'/e2100_panel_IndicadoresGeoEspaciales_Minerales.dta"
 
-* Calcular flujo total de area solicitada para mineria de oro en cada municipio-año
-gen tituMine_oro_AreaSo_total_m2Fx  = tituMine_oro_AreaSo_tGrn_m2Fx + tituMine_oro_AreaSo_tOtr_m2Fx 
+* Calcular flujo total de area SOLICITADA para mineria de oro en cada municipio-año
+gen tituMine_oro_AreaSo_total_m2Fx  = tituMine_oro_AreaSo_tGrn_m2Fx + tituMine_oro_AreaSo_tOtr_m2Fx
+gen log_tituMine_oro_AreaSo_total = log(1+tituMine_oro_AreaSo_total_m2Fx)
+
+* Calcular flujo total de area TITULADA para mineria de oro en cada municipio-año
+gen tituMine_oro_AreaTi_total_m2Fx  = tituMine_oro_AreaTi_tGrn_m2Fx + tituMine_oro_AreaTi_tOtr_m2Fx
 
 *******************************************************
-**# Especificaciones principal
+**# Especificacion principal
 *    ┏━╸┏━┓┏━┓┏━╸┏━╸    ┏━┓┏━┓╻┏┓╻┏━╸╻┏━┓┏━┓╻  
 *    ┣╸ ┗━┓┣━┛┣╸ ┃      ┣━┛┣┳┛┃┃┗┫┃  ┃┣━┛┣━┫┃  
 *    ┗━╸┗━┛╹  ┗━╸┗━╸╹   ╹  ╹┗╸╹╹ ╹┗━╸╹╹  ╹ ╹┗━╸
@@ -187,12 +195,16 @@ gen tituMine_oro_AreaSo_total_m2Fx  = tituMine_oro_AreaSo_tGrn_m2Fx + tituMine_o
 * Potencial mineral en roca
 local potencial_mineral_roca proximidad_potencial_roca 
 
-* Minería legal
-local mineria_legal log_mineLegl_oro_prod_gr
-local intencion_mineria_legal tituMine_oro_AreaSo_total_m2Fx
-
 * Potencial mineral en aluvion
 local potencial_mineral_aluvion proximidad_potencial_aluvion
+
+
+* Minería legal
+local mineria_legal log_mineLegl_oro_prod_gr
+
+* Inteción de hacer minería legal
+local intencion_mineria_legal log_tituMine_oro_AreaSo_total
+*local intencion_mineria_legal tituMine_oro_AreaTi_tOtr_m2Fx
 
 * Minería ilegal:
 * mineIleg_oro_area_SR21_km2 mineIleg_oro_nwPrp_SR21_pct mineIleg_oro_prpMun_SR21_pct
@@ -607,7 +619,7 @@ gen instr_potAluvion_precio = `potencial_mineral_aluvion'*`precio_mineral'
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio
+keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio `intencion_mineria_legal' 
 
 *******************************************************
 * Declarar el Panel
@@ -624,9 +636,6 @@ xtset id_municipio	anno
 
 *******************************************************
 **## Minería Legal
-*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻  ┏━╸┏━╸┏━┓╻  
-*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃  ┣╸ ┃╺┓┣━┫┃  
-*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
 *******************************************************
 * La especificacion principal es con 
 * Potencial: proximidad_potencial_roca * Precio 
@@ -637,10 +646,14 @@ reg `mineria_legal' instr_potAluvion_precio
 
 
 *******************************************************
+**## Intención M. legal
+*******************************************************
+reg `intencion_mineria_legal' instr_potRoca_precio
+reg `intencion_mineria_legal' instr_potAluvion_precio
+
+
+*******************************************************
 **## Minería Ilegal
-*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻   ╻  ┏━╸┏━╸┏━┓╻  
-*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃╺━╸┃  ┣╸ ┃╺┓┣━┫┃  
-*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
 *******************************************************
 
 * La especificacion principal es con 
@@ -649,6 +662,9 @@ reg `mineria_legal' instr_potAluvion_precio
 
 reg `mineria_ilegal' instr_potRoca_precio
 reg `mineria_ilegal' instr_potAluvion_precio
+
+
+
 
 
  *******************************************************                                       
@@ -666,9 +682,6 @@ reg `mineria_ilegal' instr_potAluvion_precio
 
  *******************************************************
 **## Minería Legal
-*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻  ┏━╸┏━╸┏━┓╻  
-*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃  ┣╸ ┃╺┓┣━┫┃  
-*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
 *******************************************************
 * La especificacion principal es con 
 * Potencial: proximidad_potencial_roca * Precio 
@@ -683,12 +696,17 @@ reghdfe `mineria_legal' instr_potAluvion_precio, ///
 	vce(cluster id_municipio)
 
 
+*******************************************************
+**## Intención M. legal
+*******************************************************
+reghdfe `intencion_mineria_legal' instr_potRoca_precio, ///
+	absorb(id_municipio anno) vce(cluster id_municipio)
+reghdfe `intencion_mineria_legal' instr_potAluvion_precio, ///
+	absorb(id_municipio anno) vce(cluster id_municipio)
+
 
 *******************************************************
 **## Minería Ilegal
-*    ┏┳┓╻┏┓╻┏━╸┏━┓╻┏━┓   ╻   ╻  ┏━╸┏━╸┏━┓╻  
-*    ┃┃┃┃┃┗┫┣╸ ┣┳┛┃┣━┫   ┃╺━╸┃  ┣╸ ┃╺┓┣━┫┃  
-*    ╹ ╹╹╹ ╹┗━╸╹┗╸╹╹ ╹   ╹   ┗━╸┗━╸┗━┛╹ ╹┗━╸
 *******************************************************
 
 * La especificacion principal es con 
@@ -707,4 +725,4 @@ reghdfe `mineria_ilegal' instr_potAluvion_precio, ///
 
 *****
 * Revisar conteo de observaciones de mineria legal e ilegal por año
-bysort anno: summarize `mineria_ilegal' `mineria_legal'
+*bysort anno: summarize `mineria_ilegal' `mineria_legal'
