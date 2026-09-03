@@ -2,12 +2,9 @@
 **Fecha:** 2 de septiembre de 2026  
 **Estado:** resultados exploratorios de primera etapa
 
-### Pregunta
-Como en el anterior análisis encontré que el potencial aurífero de roca predice tanto minería
-> Respuesta: El potencial aurifero de roca interactuado con el precio del oro predice tanto minería legal como ilegal
 
-### Resultados preliminares
-####  Panel con efectos fijos de municipio y año
+## Resultados preliminares
+###  Panel con efectos fijos de municipio y año
 |  | log(1 + area solicitada título minero) |  | Minería ilegal |  |
 |---|---:|---:|---:|---:|
 | **Instrumento** | **Roca × P** | **Aluvión × P** | **Roca × P** | **Aluvión × P** |
@@ -18,10 +15,11 @@ Como en el anterior análisis encontré que el potencial aurífero de roca predi
 | Estadístico F | 41.33 | 20.99 | 46,23 | 9,76 |
 | Observaciones | 11.538 | 11.538 | 12.012 | 12.012 |
 > Las regresiones absorben efectos fijos de municipio y año.
+> Cuando considero el instrumento de potencial general (i.e. proximidad a aluvión o roca en conjunto) los resultados son idénticos a los resultados de solo considerar roca
 
 ### Análisis
-- El potencial de oro en roca o en aluvión mueve tanto la intención de hacer minería legal (medida como área solicitada de título minero) como la minería ilegal (medida como porcentaje del area minada que se mina ilegalmente)
-- No encuentro instrumentos que muevan solo una de las variables. ¿proceder con instrumento de potencial sobre minería ilegal y controlar por intención de ahcer minería legal o viceversa?
+- El potencial de oro en roca mueve tanto la intención de hacer minería legal (medida como área solicitada de título minero) como la minería ilegal (medida como porcentaje del area minada que se mina ilegalmente). Lo mismo aplica para el potencial de aluvión pero con menor poder de predicción.
+- No encuentro instrumentos que muevan solo una de las variables. ¿proceder con instrumento de potencial sobre minería ilegal y controlar por intención de hacer minería legal o viceversa?
 
 ## Exploración: potencial aurífero, minería legal e ilegal
 

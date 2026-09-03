@@ -131,12 +131,19 @@ drop _merge
 *     ╹ ╹┗╸╹ ╹╹ ╹┗━┛╹  ┗━┛╹┗╸╹ ╹╹ ╹╹┗╸   ┗┛ ╹ ╹╹┗╸╹╹ ╹┗━┛┗━╸┗━╸┗━┛
 *******************************************************
 
+*******************************************************
+* Calcular variable de potencial a cualquier recurso mineral de oro
+*******************************************************
+* Los resultados han indicado que ambos tipos de potencial mueven tanto minería legal como ilegal
+gen poteMine_oro_distnc = min(poteMine_oro_distnc_roca_m, poteMine_oro_distnc_aluv_m)
+
 
 *******************************************************
 * Transformar distancia al potencial mineral en proximidad al potencial mineral
 *******************************************************
 * Para que la interpretación del indicador de distancia al potencial mineral
 * sea más intuitiva, voy a convertir distancia en proximidad
+gen proximidad_potencial_gnrl = 1 / (1 + poteMine_oro_distnc/1000)
 gen proximidad_potencial_roca = 1 / (1 + poteMine_oro_distnc_roca_m/1000)
 gen proximidad_potencial_aluvion = 1 / (1 + poteMine_oro_distnc_aluv_m/1000)
 
@@ -198,6 +205,8 @@ local potencial_mineral_roca proximidad_potencial_roca
 * Potencial mineral en aluvion
 local potencial_mineral_aluvion proximidad_potencial_aluvion
 
+* Potencial mineral en cualquier recurso (roca o aluvion)
+local potencial_mineral_gnrl proximidad_potencial_gnrl
 
 * Minería legal
 local mineria_legal log_mineLegl_oro_prod_gr
@@ -217,7 +226,7 @@ local precio_mineral precMine_oro_prmdio_oro_USoz
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `intencion_mineria_legal'
+keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `intencion_mineria_legal'
 
 *******************************************************
 **# Sección Transversal
@@ -615,11 +624,12 @@ drop _merge
 * El precio anual max y min se usarán para revisar hipotesis de auge/declive
 gen instr_potRoca_precio = `potencial_mineral_roca'*`precio_mineral'
 gen instr_potAluvion_precio = `potencial_mineral_aluvion'*`precio_mineral'
+gen instr_potGnrl_precio = `potencial_mineral_gnrl'*`precio_mineral'
 
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `mineria_legal' `potencial_mineral_aluvion' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio `intencion_mineria_legal' 
+keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio `intencion_mineria_legal' 
 
 *******************************************************
 * Declarar el Panel
@@ -643,13 +653,14 @@ xtset id_municipio	anno
 
 reg `mineria_legal' instr_potRoca_precio
 reg `mineria_legal' instr_potAluvion_precio
-
+reg `mineria_legal' instr_potGnrl_precio 
 
 *******************************************************
 **## Intención M. legal
 *******************************************************
 reg `intencion_mineria_legal' instr_potRoca_precio
 reg `intencion_mineria_legal' instr_potAluvion_precio
+reg `intencion_mineria_legal' instr_potGnrl_precio
 
 
 *******************************************************
@@ -662,6 +673,7 @@ reg `intencion_mineria_legal' instr_potAluvion_precio
 
 reg `mineria_ilegal' instr_potRoca_precio
 reg `mineria_ilegal' instr_potAluvion_precio
+reg `mineria_ilegal' instr_potGnrl_precio
 
 
 
@@ -695,15 +707,21 @@ reghdfe `mineria_legal' instr_potAluvion_precio, ///
 	absorb(id_municipio anno) ///
 	vce(cluster id_municipio)
 
+reghdfe `mineria_legal' instr_potGnrl_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
 
 *******************************************************
 **## Intención M. legal
 *******************************************************
 reghdfe `intencion_mineria_legal' instr_potRoca_precio, ///
 	absorb(id_municipio anno) vce(cluster id_municipio)
+
 reghdfe `intencion_mineria_legal' instr_potAluvion_precio, ///
 	absorb(id_municipio anno) vce(cluster id_municipio)
-
+	
+reghdfe `intencion_mineria_legal' instr_potGnrl_precio, ///
+	absorb(id_municipio anno) vce(cluster id_municipio)
 
 *******************************************************
 **## Minería Ilegal
@@ -721,6 +739,10 @@ reghdfe `mineria_ilegal' instr_potAluvion_precio, ///
 	absorb(id_municipio anno) ///
 	vce(cluster id_municipio)
 
+reghdfe `mineria_ilegal' instr_potGnrl_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+	
 
 
 *****
