@@ -47,12 +47,14 @@ e2011_SR2021_mineriaIlegal_armonizado]
 e2011_WbPinkSheet_preciosMinerales_armonizado[data/intermediate/e2011
 World Bank - Pink Sheet
 Precios Minerales armonizado]
+e1001_panel_cultivos_UPRA[data/intermediate/
+e1001_panel_cultivos_UPRA]
 
 
 
 %% Bases de datos intermedias para STATA
-e1001_panel_cultivos_UPRA[data/intermediate/
-e1001_panel_cultivos_UPRA]:::base_para_stata
+e1101_panel_informacion_agricola[data/intermediate/
+e1101_panel_informacionAgricola]:::base_para_stata
 e2100_panel_IndicadoresGeoEspaciales_Minerales[data/intermediate/
 e2100_panel_IndicadoresGeoEspaciales_Minerales]:::base_para_stata
 e2101_panel_InfoAdicional_Minerales[data/intermediate/
@@ -68,24 +70,46 @@ e3000 Precios de minerales]:::base_para_stata
 minerales_armonizado]
 
 
-%% engines
+%% engines Python
 e1001_processs_UPRA{e1001
 processs_UPRA}
+
+e1101_organizar_info_agricola{e1101
+Organizar información
+Agrícola}
+
+
+
+
 e2001_descargar_poligonostitulosmineros{e2001
 descargar
 poligonos titulos mineros}
+
 e2011_armonizar_taxonomias_minerales{e2011
 armonizar taxonomias
 minerales}
+
 e2100_calcular_indicadoresGeoEspaciales_minerales{e2100
 Calcular Indicadores Geoespaciales
 de Minerales}
+
 e2101_organizar_informacionAdicional_minerales{e2101
 Organizar Información Adicional de Minerales}
+
 e3000_procesarPreciosMinerales{e3000
 Procesar Precios de minerales}
-e8000_explorar_primera_etapa((e8000 
+
+%% engines STATA
+e8100_procesar_datos_minerales((e8100 
+Procesar
+datos minerales))
+
+e8200_explorar_primera_etapa((e8200 
 Explorar primera etapa))
+
+e8500_estimar_VI_especificacion_principal((e8500 
+Estimar VI
+especificación principal))
 
 %% conexiones
 
@@ -135,10 +159,21 @@ e2101_organizar_informacionAdicional_minerales---e2101_panel_InfoAdicional_Miner
 e2011_WbPinkSheet_preciosMinerales_armonizado---e3000_procesarPreciosMinerales
 e3000_procesarPreciosMinerales---e3000_preciosMinerales
 
+%% Pre-procesamiento STATA
+e2101_panel_InfoAdicional_Minerales---e8100_procesar_datos_minerales
+e2100_panel_IndicadoresGeoEspaciales_Minerales---e8100_procesar_datos_minerales
+
 %% Primera etapa STATA
-e2101_panel_InfoAdicional_Minerales---e8000_explorar_primera_etapa
-e2100_panel_IndicadoresGeoEspaciales_Minerales---e8000_explorar_primera_etapa
-e3000_preciosMinerales---e8000_explorar_primera_etapa
+e8100_procesar_datos_minerales---e8200_explorar_primera_etapa
+e3000_preciosMinerales---e8200_explorar_primera_etapa
+
+
+%% VI
+e1001_panel_cultivos_UPRA---e1101_organizar_info_agricola
+e1101_organizar_info_agricola---e1101_panel_informacion_agricola
+e1101_panel_informacion_agricola---e8500_estimar_VI_especificacion_principal
+e3000_preciosMinerales---e8500_estimar_VI_especificacion_principal
+e8100_procesar_datos_minerales---e8500_estimar_VI_especificacion_principal
 
 ```
 
