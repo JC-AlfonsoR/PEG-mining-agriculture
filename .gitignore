@@ -1,5 +1,6 @@
 /.gitignore
 /data/raw
+/Seminario_Tesis/
 *.pyc
 /data/intermediate
 /data/0_Panel_CEDE

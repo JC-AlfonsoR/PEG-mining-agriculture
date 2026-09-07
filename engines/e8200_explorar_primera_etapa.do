@@ -497,7 +497,7 @@ restore
  * Incluir el precio anual de los minerales
 *******************************************************
 * El panel que tengo es (municipio, año). Los datos en precios_minerales solo estan identificados por año. Entonces, el merge replica el valor del precio anual para cada municipio
-merge m:1 anno using "`data_intermediate'/e3000_precios_minerales.dta"
+merge m:1 anno using "$data_intermediate/e3000_precios_minerales.dta"
 
 * Analizar merge
 tab _merge

@@ -8,6 +8,7 @@
 *******************************************************
 
 
+
 *******************************************************
 **# Preámbulo
 *******************************************************
@@ -17,10 +18,37 @@ cls
 clear all
 set more off
 
+*******************************************************
+* Instalar versiones compatibles de paquetes
+
+* Eliminar versiones anteriores
+*cap ado uninstall ivreghdfe
+*cap ado uninstall reghdfe
+*cap ado uninstall ftools
+*cap ado uninstall ivreg2
+
+
+* Instalar versiones compatibles desde las fuentes oficiales
+*net install ftools, ///
+*    from("https://raw.githubusercontent.com/sergiocorreia/ftools/master/src/") ///
+*    replace
+
+*net install reghdfe, ///
+*    from("https://raw.githubusercontent.com/sergiocorreia/reghdfe/master/src/") ///
+*    replace
+
+*ssc install ivreg2, replace
+
+*net install ivreghdfe, ///
+*    from("https://raw.githubusercontent.com/sergiocorreia/ivreghdfe/master/src/") ///
+*    replace
+
+*ssc install ranktest, replace
+*ssc install estout, replace
 
 *******************************************************
 * Configuración
-*******************************************************
+
 * Raíz del proyecto
 local computador=c(username)
 if "`computador'"=="jcalf" {
@@ -136,7 +164,63 @@ xtset id_municipio	anno
 
 
 *******************************************************
-**# Variables Instrumentales
+**# Cargar informaicón agrícola
+*    ┏━╸┏━┓┏━┓┏━╸┏━┓┏━┓   ╻┏┓╻┏━╸┏━┓   ┏━╸╻ ╻╻  ╺┳╸╻╻ ╻┏━┓┏━┓
+*    ┃  ┣━┫┣┳┛┃╺┓┣━┫┣┳┛   ┃┃┗┫┣╸ ┃ ┃   ┃  ┃ ┃┃   ┃ ┃┃┏┛┃ ┃┗━┓
+*    ┗━╸╹ ╹╹┗╸┗━┛╹ ╹╹┗╸   ╹╹ ╹╹  ┗━┛   ┗━╸┗━┛┗━╸ ╹ ╹┗┛ ┗━┛┗━┛
+*******************************************************
+
+* Cargar panel de cultivos
+merge 1:1 codigo_dane_municipio anno using "$data_intermediate/e1101_panel_informacionAgricola.dta"
+
+*******************************************************
+**# Regresión Directa
+*     ▄▄▄▄▄                ▄▄▄▄     ▀                           ▄          
+*     █   ▀█               █   ▀▄ ▄▄▄     ▄ ▄▄   ▄▄▄    ▄▄▄   ▄▄█▄▄   ▄▄▄  
+*     █▄▄▄▄▀               █    █   █     █▀  ▀ █▀  █  █▀  ▀    █    ▀   █ 
+*     █   ▀▄               █    █   █     █     █▀▀▀▀  █        █    ▄▀▀▀█ 
+*     █    ▀   █           █▄▄▄▀  ▄▄█▄▄   █     ▀█▄▄▀  ▀█▄▄▀    ▀▄▄  ▀▄▄▀█ 
+*******************************************************
+* Antes de correr la regresión principal, corro la regresión directa entre
+* Minería legal vs producción agrícola
+
+
+**# Regresión simple sin controles
+* Minería ilegal explicando producción agrícola
+reg prodAgr_total_ACosch_totl_ha `mineria_ilegal'
+reg prodAgr_total_ASembr_totl_ha `mineria_ilegal'
+reg prodAgr_total_Produc_totl_ton mineIleg_oro_nwPrp_SR21_pct
+
+* F=111.25
+* beta=10.69***, t=10.55
+* La regresión directa muestra la existencia de una relación entre
+* el area total cosechada y la minería ilegal
+* Este planteamiento sufre del problema de endogeneidad,
+* Por eso instrumento Potencial geológico X precio oro sobre la minería ilegal
+* para aislar la variación asociada solo a ese instrumento
+* El resultado es análogo con area sembrada y producción total.
+* voy a explorar el comportamiento con desagregaciones de producción agrícola
+
+* Calcular logaritmos de las variables
+gen log_prodAgr_total_ACosch = log(1+prodAgr_total_ACosch_totl_ha)
+gen log_prodAgr_CCPerm_ACosch = log(1+prodAgr_CCPerm_ACosch_cicl_ha)
+gen log_prodAgr_CCTrns_ACosch = log(1+prodAgr_CCTrns_ACosch_cicl_ha)
+
+local resultados_agricolas ///
+	prodAgr_total_ACosch_totl_ha ///
+	prodAgr_CCPerm_ACosch_cicl_ha ///
+	prodAgr_CCTrns_ACosch_cicl_ha
+	
+	*prodAgr_GCCerl_ACosch_grpo_ha prodAgr_GCFrut_ACosch_grpo_ha prodAgr_GCHort_ACosch_grpo_ha prodAgr_GCLegu_ACosch_grpo_ha prodAgr_GCMedc_ACosch_grpo_ha prodAgr_GCOlea_ACosch_grpo_ha prodAgr_GCRaiz_ACosch_grpo_ha prodAgr_GCTrop_ACosch_grpo_ha 
+
+local log_resultados_agricolas /// 
+	log_prodAgr_total_ACosch ///
+	log_prodAgr_CCPerm_ACosch ///
+	log_prodAgr_CCTrns_ACosch
+	
+
+*******************************************************
+**# VI
 *     ▄    ▄ ▄▄▄▄▄ 
 *     ▀▄  ▄▀   █   
 *      █  █    █   
@@ -145,8 +229,158 @@ xtset id_municipio	anno
 *******************************************************
 
 
+foreach y of local resultados_agricolas {
+	
+	* Generar logaritmo de la variable de interes
+	gen log_y = log(1+`y')
+	local y_considerada log_y
+	*local y_considerada = `y'
+	
+	display as text _newline ///
+        "Estimando modelos para la variable dependiente: `y'"
+	eststo clear
+
+	
+	** 1. VI simple
+	quietly eststo vi_simple: ///
+		ivreghdfe `y_considerada' ///
+			(`mineria_ilegal' = instr_potRoca_precio), ///
+			cluster(codigo_dane_municipio) ///
+			first
+
+    quietly estadd scalar KP_F = e(widstat)
+
+	
+	** 2. VI con efectos fijos de AÑO
+	quietly eststo vi_anno: ///
+        ivreghdfe `y_considerada' ///
+            (`mineria_ilegal' = instr_potRoca_precio), ///
+            absorb(anno) ///
+            cluster(codigo_dane_municipio) ///
+            first
+
+    quietly estadd scalar KP_F = e(widstat)
+	
+	** 3. VI con efectos fijos de MUNICIPIO
+	quietly eststo vi_municipio: ///
+        ivreghdfe `y_considerada' ///
+            (`mineria_ilegal' = instr_potRoca_precio), ///
+            absorb(codigo_dane_municipio) ///
+            cluster(codigo_dane_municipio) ///
+            first
+
+    quietly estadd scalar KP_F = e(widstat)
+	
+	
+	** Efecto fijo de MUNICIPIO y AÑO
+	quietly eststo vi_municipio_anno: ///
+        ivreghdfe `y_considerada' ///
+            (`mineria_ilegal' = instr_potRoca_precio), ///
+            absorb(codigo_dane_municipio anno) ///
+            cluster(codigo_dane_municipio) ///
+            first
+	
+	
+	** Mostrar tabla en Stata
+    ********************************************************
+
+	display as text _newline ///
+        "Estimando modelos para la variable dependiente: `y'"
+		
+	esttab vi_simple vi_anno vi_municipio vi_municipio_anno, ///
+		order(`mineria_ilegal') ///
+		mtitles( ///
+			"VI simple" ///
+			"EF año" ///
+			"EF municipio" ///
+			"EF municipio & año" ///
+		) ///
+	
+
+	** Eliminar variable de logaritmo
+	drop log_y
+}
+
+
+
+
 *******************************************************
-**# Variables Instrumentales
-*    ┏━╸┏━┓┏━┓┏━╸┏━┓┏━┓   ╻┏┓╻┏━╸┏━┓   ┏━╸╻ ╻╻  ╺┳╸╻╻ ╻┏━┓┏━┓
-*    ┃  ┣━┫┣┳┛┃╺┓┣━┫┣┳┛   ┃┃┗┫┣╸ ┃ ┃   ┃  ┃ ┃┃   ┃ ┃┃┏┛┃ ┃┗━┓
-*    ┗━╸╹ ╹╹┗╸┗━┛╹ ╹╹┗╸   ╹╹ ╹╹  ┗━┛   ┗━╸┗━┛┗━╸ ╹ ╹┗┛ ┗━┛┗━┛
+**# Vi X=minería legal
+*     ▄    ▄ ▄▄▄▄▄ 
+*     ▀▄  ▄▀   █   
+*      █  █    █   
+*      ▀▄▄▀    █   
+*       ██   ▄▄█▄▄ 
+*******************************************************
+
+foreach y of local resultados_agricolas {
+	
+	* Generar logaritmo de la variable de interes
+	gen log_y = log(1+`y')
+	local y_considerada log_y
+	*local y_considerada = `y'
+	
+	display as text _newline ///
+        "Estimando modelos para la variable dependiente: `y'"
+	eststo clear
+
+	
+	** 1. VI simple
+	quietly eststo vi_simple: ///
+		ivreghdfe `y_considerada' `mineria_legal' ///
+			(`mineria_ilegal' = instr_potRoca_precio), ///
+			cluster(codigo_dane_municipio) ///
+			first
+
+    quietly estadd scalar KP_F = e(widstat)
+
+	
+	** 2. VI con efectos fijos de AÑO
+	quietly eststo vi_anno: ///
+        ivreghdfe `y_considerada' `mineria_legal' ///
+            (`mineria_ilegal' = instr_potRoca_precio), ///
+            absorb(anno) ///
+            cluster(codigo_dane_municipio) ///
+            first
+
+    quietly estadd scalar KP_F = e(widstat)
+	
+	** 3. VI con efectos fijos de MUNICIPIO
+	quietly eststo vi_municipio: ///
+        ivreghdfe `y_considerada' `mineria_legal' ///
+            (`mineria_ilegal' = instr_potRoca_precio), ///
+            absorb(codigo_dane_municipio) ///
+            cluster(codigo_dane_municipio) ///
+            first
+
+    quietly estadd scalar KP_F = e(widstat)
+	
+	
+	** Efecto fijo de MUNICIPIO y AÑO
+	quietly eststo vi_municipio_anno: ///
+        ivreghdfe `y_considerada' `mineria_legal' ///
+            (`mineria_ilegal' = instr_potRoca_precio), ///
+            absorb(codigo_dane_municipio anno) ///
+            cluster(codigo_dane_municipio) ///
+            first
+	
+	
+	** Mostrar tabla en Stata
+    ********************************************************
+
+	display as text _newline ///
+        "Estimando modelos para la variable dependiente: `y'"
+		
+	esttab vi_simple vi_anno vi_municipio vi_municipio_anno, ///
+		order(`mineria_ilegal') ///
+		mtitles( ///
+			"VI simple" ///
+			"EF año" ///
+			"EF municipio" ///
+			"EF municipio & año" ///
+		) ///
+	
+
+	** Eliminar variable de logaritmo
+	drop log_y
+}
