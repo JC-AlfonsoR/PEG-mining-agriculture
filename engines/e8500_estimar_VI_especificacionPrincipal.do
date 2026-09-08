@@ -206,12 +206,21 @@ gen log_prodAgr_total_ACosch = log(1+prodAgr_total_ACosch_totl_ha)
 gen log_prodAgr_CCPerm_ACosch = log(1+prodAgr_CCPerm_ACosch_cicl_ha)
 gen log_prodAgr_CCTrns_ACosch = log(1+prodAgr_CCTrns_ACosch_cicl_ha)
 
-local resultados_agricolas ///
+*local resultados_agricolas ///
 	prodAgr_total_ACosch_totl_ha ///
 	prodAgr_CCPerm_ACosch_cicl_ha ///
-	prodAgr_CCTrns_ACosch_cicl_ha
-	
+	prodAgr_CCTrns_ACosch_cicl_ha	
 	*prodAgr_GCCerl_ACosch_grpo_ha prodAgr_GCFrut_ACosch_grpo_ha prodAgr_GCHort_ACosch_grpo_ha prodAgr_GCLegu_ACosch_grpo_ha prodAgr_GCMedc_ACosch_grpo_ha prodAgr_GCOlea_ACosch_grpo_ha prodAgr_GCRaiz_ACosch_grpo_ha prodAgr_GCTrop_ACosch_grpo_ha 
+	
+*local resultados_agricolas ///
+	prodAgr_total_ASembr_totl_ha ///
+	prodAgr_CCPerm_ASembr_cicl_ha ///
+	prodAgr_CCTrns_ASembr_cicl_ha
+	
+local resultados_agricolas ///
+	prodAgr_total_Produc_totl_ton ///
+	prodAgr_CCPerm_Produc_cicl_ton ///
+	prodAgr_CCTrns_Produc_cicl_ton
 
 local log_resultados_agricolas /// 
 	log_prodAgr_total_ACosch ///
@@ -287,6 +296,18 @@ foreach y of local resultados_agricolas {
 	display as text _newline ///
         "Estimando modelos para la variable dependiente: `y'"
 		
+	esttab vi_simple vi_anno vi_municipio vi_municipio_anno ///
+		using "outputs/regresiones/VI_`y'.md", ///
+		replace md ///
+		order(`mineria_ilegal') ///
+		mtitles( ///
+			"VI simple" ///
+			"EF año" ///
+			"EF municipio" ///
+			"EF municipio & año" ///
+		) ///
+
+	* Mostrar resultado en STATA
 	esttab vi_simple vi_anno vi_municipio vi_municipio_anno, ///
 		order(`mineria_ilegal') ///
 		mtitles( ///
@@ -295,7 +316,6 @@ foreach y of local resultados_agricolas {
 			"EF municipio" ///
 			"EF municipio & año" ///
 		) ///
-	
 
 	** Eliminar variable de logaritmo
 	drop log_y
@@ -327,7 +347,7 @@ foreach y of local resultados_agricolas {
 	
 	** 1. VI simple
 	quietly eststo vi_simple: ///
-		ivreghdfe `y_considerada' `mineria_legal' ///
+		ivreghdfe `y_considerada' `intencion_mineria_legal' ///
 			(`mineria_ilegal' = instr_potRoca_precio), ///
 			cluster(codigo_dane_municipio) ///
 			first
@@ -337,7 +357,7 @@ foreach y of local resultados_agricolas {
 	
 	** 2. VI con efectos fijos de AÑO
 	quietly eststo vi_anno: ///
-        ivreghdfe `y_considerada' `mineria_legal' ///
+        ivreghdfe `y_considerada' `intencion_mineria_legal' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(anno) ///
             cluster(codigo_dane_municipio) ///
@@ -347,7 +367,7 @@ foreach y of local resultados_agricolas {
 	
 	** 3. VI con efectos fijos de MUNICIPIO
 	quietly eststo vi_municipio: ///
-        ivreghdfe `y_considerada' `mineria_legal' ///
+        ivreghdfe `y_considerada' `intencion_mineria_legal' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(codigo_dane_municipio) ///
             cluster(codigo_dane_municipio) ///
@@ -358,7 +378,7 @@ foreach y of local resultados_agricolas {
 	
 	** Efecto fijo de MUNICIPIO y AÑO
 	quietly eststo vi_municipio_anno: ///
-        ivreghdfe `y_considerada' `mineria_legal' ///
+        ivreghdfe `y_considerada' `intencion_mineria_legal' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(codigo_dane_municipio anno) ///
             cluster(codigo_dane_municipio) ///
@@ -370,7 +390,20 @@ foreach y of local resultados_agricolas {
 
 	display as text _newline ///
         "Estimando modelos para la variable dependiente: `y'"
+	
+	* Exportar resultado
+	esttab vi_simple vi_anno vi_municipio vi_municipio_anno ///
+		using "outputs/regresiones/VI_mLegal_`y'.md", ///
+		replace md ///
+		order(`mineria_ilegal') ///
+		mtitles( ///
+			"VI simple" ///
+			"EF año" ///
+			"EF municipio" ///
+			"EF municipio & año" ///
+		) ///
 		
+	* Mostrar resultado en STATA
 	esttab vi_simple vi_anno vi_municipio vi_municipio_anno, ///
 		order(`mineria_ilegal') ///
 		mtitles( ///

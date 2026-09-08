@@ -1,3 +1,57 @@
+## Exploración: VI
+**Fecha:** 7 de septiembre de 2026  
+**Estado:** resultados exploratorios de VI
+
+### Regresiones
+Con el modelo:
+- $Y_{i,t}=Área\ Cosechada_{i,t}$. Considero área total y desagregada por cultivos permanentes y cultivos transitorios.
+- $D_{i,t}=Porcentaje\ de\ nueva\ área\ minada\ ilegalmente_{i,t}$
+- $X_{i,t}=log(1+area\ solicitada\ minería\ oro_{i,t})$
+- $Z_{i,t}=Potencial\ aurifero\ roca_{i}\ X\ precio\ oro_{t}$
+Encuentro resultados significativos en los planteamientos de VI simple, VI con efectos fijos de municipio y VI con efectos fijos de año. Pero, los efectos se disuelven cuando considero el modelo con Efectos fijo de municipio y año:
+
+**Y=ProdAgr_total_ACosch**
+|              |    VI simple                  |       EF año                  | EF municipio                  | EF municipio & año                  |
+| ------------ | :---------------------------: | :---------------------------: | :---------------------------: | :---------------------------: |
+| mineIleg\_oro\_nwPrp\_SR21\_pct |       0.0104<sup>\*\*</sup>   |      0.00401                  |       0.0876<sup>\*\*\*</sup> |       0.0985                  |
+|              |       (2.83)                  |       (1.01)                  |       (5.19)                  |       (1.26)                  |
+| log\_tituMine\_oro\_AreaSo\_total |      -0.0249<sup>\*</sup>     |      0.00477                  |      -0.0213                  |      -0.0256                  |
+|              |      (-2.05)                  |       (0.46)                  |      (-0.99)                  |      (-0.96)                  |
+| \_cons       |        6.948<sup>\*\*\*</sup> |                               |                               |                               |
+|              |      (39.84)                  |                               |                               |                               |
+| *N*          |         5827                  |         5827                  |         5826                  |         5826                  |
+
+
+**Y=ProdAgr_CCPerm_ACosch**
+|              |    VI simple                  |       EF año                  | EF municipio                  | EF municipio & año                  |
+| ------------ | :---------------------------: | :---------------------------: | :---------------------------: | :---------------------------: |
+| mineIleg\_oro\_nwPrp\_SR21\_pct |       0.0306<sup>\*\*\*</sup> |       0.0320<sup>\*\*\*</sup> |       0.0110<sup>\*\*</sup>   |     -0.00441                  |
+|              |       (5.12)                  |       (4.95)                  |       (2.82)                  |      (-0.28)                  |
+| log\_tituMine\_oro\_AreaSo\_total |      -0.0329                  |      -0.0426                  |      -0.0112<sup>\*</sup>     |     -0.00842                  |
+|              |      (-1.52)                  |      (-1.85)                  |      (-2.00)                  |      (-1.41)                  |
+| \_cons       |        5.119<sup>\*\*\*</sup> |                               |                               |                               |
+|              |      (16.75)                  |                               |                               |                               |
+| *N*          |         4868                  |         4867                  |         4858                  |         4857                  |
+
+**Y=ProdAgr_CCTrans_ACosch**
+|              |    VI simple                  |       EF año                  | EF municipio                  | EF municipio & año                  |
+| ------------ | :---------------------------: | :---------------------------: | :---------------------------: | :---------------------------: |
+| mineIleg\_oro\_nwPrp\_SR21\_pct |      -0.0220<sup>\*\*\*</sup> |      -0.0260<sup>\*\*\*</sup> |       0.0160<sup>\*\*</sup>   |      -0.0114                  |
+|              |      (-4.32)                  |      (-4.50)                  |       (2.92)                  |      (-0.55)                  |
+| log\_tituMine\_oro\_AreaSo\_total |       0.0366<sup>\*\*</sup>   |       0.0556<sup>\*\*\*</sup> |     -0.00179                  |      0.00434                  |
+|              |       (2.62)                  |       (3.63)                  |      (-0.28)                  |       (0.66)                  |
+| \_cons       |        7.344<sup>\*\*\*</sup> |                               |                               |                               |
+|              |      (30.82)                  |                               |                               |                               |
+| *N*          |         5768                  |         5768                  |         5766                  |         5766                  |
+
+*t* statistics in parentheses<br>
+<sup>\*</sup> *p* < 0.05, <sup>\*\*</sup> *p* < 0.01, <sup>\*\*\*</sup> *p* < 0.001
+
+
+
+Cuando considero $Y$ como área Sembrada (Ha) o producción (ton), el resultado es análogo y menos significativo que el de considerar $Y$ como área cosechada. [Ver las otras regresiones](../outputs/regresiones)
+
+
 ## Exploración: Intención de hacer minería legal
 **Fecha:** 2 de septiembre de 2026  
 **Estado:** resultados exploratorios de primera etapa
