@@ -49,7 +49,8 @@ Encuentro resultados significativos en los planteamientos de VI simple, VI con e
 
 
 
-Cuando considero $Y$ como área Sembrada (Ha) o producción (ton), el resultado es análogo y menos significativo que el de considerar $Y$ como área cosechada. [Ver las otras regresiones](../outputs/regresiones)
+Cuando considero $Y$ como área Sembrada (Ha) o producción (ton), el resultado es análogo y menos significativo que el de considerar $Y$ como área cosechada. [Ver las otras regresiones]([../outputs/regresiones](https://github.com/JC-AlfonsoR/PEG-mining-agriculture/tree/main/outputs/regresiones)
+
 
 
 ## Exploración: Intención de hacer minería legal
