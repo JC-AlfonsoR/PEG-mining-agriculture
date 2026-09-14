@@ -188,8 +188,20 @@ merge 1:1 codigo_dane_municipio anno using "$data_intermediate/e1101_panel_infor
 **# Regresión simple sin controles
 * Minería ilegal explicando producción agrícola
 reg prodAgr_total_ACosch_totl_ha `mineria_ilegal'
-reg prodAgr_total_ASembr_totl_ha `mineria_ilegal'
-reg prodAgr_total_Produc_totl_ton mineIleg_oro_nwPrp_SR21_pct
+*reg prodAgr_total_ASembr_totl_ha `mineria_ilegal'
+*reg prodAgr_total_Produc_totl_ton `mineria_ilegal'
+
+
+**# Regresión simple sin controles
+* Minería legal explicando producción agrícola
+reg prodAgr_total_ACosch_totl_ha `intencion_mineria_legal'
+*reg prodAgr_total_ASembr_totl_ha `intencion_mineria_legal'
+*reg prodAgr_total_Produc_totl_ton `intencion_mineria_legal'
+
+
+reg prodAgr_total_ACosch_totl_ha `mineria_ilegal' `intencion_mineria_legal'
+reg prodAgr_total_ASembr_totl_ha `mineria_ilegal' `intencion_mineria_legal'
+reg prodAgr_total_Produc_totl_ton `mineria_ilegal' `intencion_mineria_legal'
 
 * F=111.25
 * beta=10.69***, t=10.55
@@ -200,6 +212,15 @@ reg prodAgr_total_Produc_totl_ton mineIleg_oro_nwPrp_SR21_pct
 * para aislar la variación asociada solo a ese instrumento
 * El resultado es análogo con area sembrada y producción total.
 * voy a explorar el comportamiento con desagregaciones de producción agrícola
+
+
+
+*******************************************************
+**# Transformar variables
+*    ╺┳╸┏━┓┏━┓┏┓╻┏━┓┏━╸┏━┓┏━┓┏┳┓┏━┓┏━┓   ╻ ╻┏━┓┏━┓╻┏━┓┏┓ ╻  ┏━╸┏━┓
+*     ┃ ┣┳┛┣━┫┃┗┫┗━┓┣╸ ┃ ┃┣┳┛┃┃┃┣━┫┣┳┛   ┃┏┛┣━┫┣┳┛┃┣━┫┣┻┓┃  ┣╸ ┗━┓
+*     ╹ ╹┗╸╹ ╹╹ ╹┗━┛╹  ┗━┛╹┗╸╹ ╹╹ ╹╹┗╸   ┗┛ ╹ ╹╹┗╸╹╹ ╹┗━┛┗━╸┗━╸┗━┛
+*******************************************************
 
 * Calcular logaritmos de las variables
 gen log_prodAgr_total_ACosch = log(1+prodAgr_total_ACosch_totl_ha)
@@ -227,6 +248,21 @@ local log_resultados_agricolas ///
 	log_prodAgr_CCPerm_ACosch ///
 	log_prodAgr_CCTrns_ACosch
 	
+
+	
+	
+*******************************************************	
+* Conteo de variables
+preserve
+
+* Conservar observaciones sin valores faltantes en A, B y C
+keep if !missing(prodAgr_total_Produc_totl_ton, instr_potRoca_precio, `mineria_ilegal', `intencion_mineria_legal')
+
+* Mostrar cuántas observaciones completas hay por año
+tabulate anno
+
+restore
+*******************************************************
 
 *******************************************************
 **# VI
