@@ -152,3 +152,28 @@ This document tracks all datasets used in the project.
  	- Se crea a partir de los datos [aab UPRA](#aab-upra)
 
 
+## aca CHIRPS
+- **Type:** Raw
+- **Folder:** /data/raw/aca_CHIRPS_precipitacion
+- **Source institution:**  Climate Hazards Center UC Santa Barbara
+- **Original source / URL:** https://www.chc.ucsb.edu/data/chirps3
+- **Date obtained:** 14-sep-2026
+- **Unit of observation** pixel-mes
+- **Processing script:**
+	- Descargar archivos TIFF: [engines/e1010_descargar_precipitacion_temperatura.ipynb](../engines/e1010_descargar_precipitacion_temperatura.ipynb)
+- **Notes:**
+	- Para latam, descargué los datos mensuales de precipitación
+	- Los datos de precipitación por pixel se procesan para promediar espacialmente dentro del municipio.
+
+## acb CHIRTS
+- **Type:** Raw
+- **Folder:** /data/raw/acb_CHIRTS_temperatura
+- **Source institution:**  Climate Hazards Center UC Santa Barbara
+- **Original source / URL:** https://www.chc.ucsb.edu/data/chirts-era5
+- **Date obtained:** 14-sep-2026
+- **Unit of observation** pixel-mes
+- **Processing script:**
+	- Descargar archivos TIFF: [engines/e1010_descargar_precipitacion_temperatura.ipynb](../engines/e1010_descargar_precipitacion_temperatura.ipynb)
+- **Notes:**
+	- Descargué los datos mensuales de Tmax y Tmin
+	- Los datos de temperautra por pixel se procesan para promediar espacialmente dentro del municipio.
