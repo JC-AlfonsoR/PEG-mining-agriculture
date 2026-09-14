@@ -32,6 +32,8 @@ poligonos municipales]
 WB_pinkSheet_preciosMateriasPrimas[World Bank
 Pink Sheet:
 Precios Materias Primas]
+CHIRPS_precipitacion[CHIRPS precipitación]
+CHIRTS_temperatura[CHIRTS Temperatura]
 
 %% Bases de datos intermedias
 e2011_poligonos_titulosmineros_armonizado[data/intermediate/
@@ -55,6 +57,8 @@ e1001_panel_cultivos_UPRA]
 %% Bases de datos intermedias para STATA
 e1101_panel_informacion_agricola[data/intermediate/
 e1101_panel_informacionAgricola]:::base_para_stata
+e1011_panel_IndicadoresGeoEspaciales_Clima[data/intermediate/
+e1011_panel_IndicadoresGeoEspaciales_Clima]:::base_para_stata
 e2100_panel_IndicadoresGeoEspaciales_Minerales[data/intermediate/
 e2100_panel_IndicadoresGeoEspaciales_Minerales]:::base_para_stata
 e2101_panel_InfoAdicional_Minerales[data/intermediate/
@@ -71,15 +75,19 @@ minerales_armonizado]
 
 
 %% engines Python
+
 e1001_processs_UPRA{e1001
 processs_UPRA}
+
+e1010_descargar_precipitacion_temperatura{e1010 descargar
+precipitacion y temperatura}
+
+e1011_calcular_indicadoresGeoEspaciales_clima{e1011 calcular
+Indicadores Goespaciales de Clima}
 
 e1101_organizar_info_agricola{e1101
 Organizar información
 Agrícola}
-
-
-
 
 e2001_descargar_poligonostitulosmineros{e2001
 descargar
@@ -149,6 +157,13 @@ DANE_poligonos_municipales---e2100_calcular_indicadoresGeoEspaciales_minerales
 e2011_poligonos_titulosmineros_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
 e2100_calcular_indicadoresGeoEspaciales_minerales---e2100_panel_IndicadoresGeoEspaciales_Minerales
 
+%% Controles climáticos
+e1010_descargar_precipitacion_temperatura---CHIRPS_precipitacion
+e1010_descargar_precipitacion_temperatura---CHIRTS_temperatura
+CHIRTS_temperatura---e1011_calcular_indicadoresGeoEspaciales_clima
+CHIRPS_precipitacion---e1011_calcular_indicadoresGeoEspaciales_clima
+DANE_poligonos_municipales---e1011_calcular_indicadoresGeoEspaciales_clima
+e1011_calcular_indicadoresGeoEspaciales_clima---e1011_panel_IndicadoresGeoEspaciales_Clima
 
 %% Organizar información adicional de minerales
 e2011_SR2021_mineriaIlegal---e2101_organizar_informacionAdicional_minerales
