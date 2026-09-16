@@ -83,7 +83,8 @@ e1010_descargar_precipitacion_temperatura{e1010 descargar
 precipitacion y temperatura}
 
 e1011_calcular_indicadoresGeoEspaciales_clima{e1011 calcular
-Indicadores Goespaciales de Clima}
+Indicadores Goespaciales
+ de Clima}
 
 e1101_organizar_info_agricola{e1101
 Organizar información
