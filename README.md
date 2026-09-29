@@ -57,8 +57,8 @@ e1001_panel_cultivos_UPRA]
 %% Bases de datos intermedias para STATA
 e1101_panel_informacion_agricola[data/intermediate/
 e1101_panel_informacionAgricola]:::base_para_stata
-e1011_panel_IndicadoresGeoEspaciales_Clima[data/intermediate/
-e1011_panel_IndicadoresGeoEspaciales_Clima]:::base_para_stata
+e1011_panel_IndicadoresEspaciales_Clima[data/intermediate/
+e1011_panel_IndicadoresEspaciales_Clima]:::base_para_stata
 e2100_panel_IndicadoresGeoEspaciales_Minerales[data/intermediate/
 e2100_panel_IndicadoresGeoEspaciales_Minerales]:::base_para_stata
 e2101_panel_InfoAdicional_Minerales[data/intermediate/
@@ -82,8 +82,8 @@ processs_UPRA}
 e1010_descargar_precipitacion_temperatura{e1010 descargar
 precipitacion y temperatura}
 
-e1011_calcular_indicadoresGeoEspaciales_clima{e1011 calcular
-Indicadores Goespaciales
+e1011_calcular_indicadoresEspaciales_clima{e1011 calcular
+Indicadores Espaciales
  de Clima}
 
 e1101_organizar_info_agricola{e1101
@@ -161,10 +161,10 @@ e2100_calcular_indicadoresGeoEspaciales_minerales---e2100_panel_IndicadoresGeoEs
 %% Controles climáticos
 e1010_descargar_precipitacion_temperatura---CHIRPS_precipitacion
 e1010_descargar_precipitacion_temperatura---CHIRTS_temperatura
-CHIRTS_temperatura---e1011_calcular_indicadoresGeoEspaciales_clima
-CHIRPS_precipitacion---e1011_calcular_indicadoresGeoEspaciales_clima
-DANE_poligonos_municipales---e1011_calcular_indicadoresGeoEspaciales_clima
-e1011_calcular_indicadoresGeoEspaciales_clima---e1011_panel_IndicadoresGeoEspaciales_Clima
+CHIRTS_temperatura---e1011_calcular_indicadoresEspaciales_clima
+CHIRPS_precipitacion---e1011_calcular_indicadoresEspaciales_clima
+DANE_poligonos_municipales---e1011_calcular_indicadoresEspaciales_clima
+e1011_calcular_indicadoresEspaciales_clima---e1011_panel_IndicadoresEspaciales_Clima
 
 %% Organizar información adicional de minerales
 e2011_SR2021_mineriaIlegal---e2101_organizar_informacionAdicional_minerales
