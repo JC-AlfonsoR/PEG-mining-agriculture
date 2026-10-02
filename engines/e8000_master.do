@@ -48,3 +48,6 @@ do "$engines/e8050_armar_panel.do"
 
 * Exportar resumen del panel para seguimiento con git
 do "$engines/e8051_resumir_panel_para_seguimiento.do"
+
+* Explorar la primera etapa
+do "$engines/e8201_primera_etapa.do"
