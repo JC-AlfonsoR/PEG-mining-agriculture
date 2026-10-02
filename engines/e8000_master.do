@@ -28,7 +28,7 @@ else {
     display as error ///
         "Usuario no configurado: `computador'."
     display as error ///
-        "Agrega la ruta de este computador en e8000_configurar.do."
+        "Agrega la ruta de este computador en e8000_master.do"
     exit 198
 }
 

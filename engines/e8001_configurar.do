@@ -1,5 +1,5 @@
 *******************************************************
-** e8000_configurar.do
+** e8001_configurar.do
 **
 ** Objetivo:
 ** Configurar el entorno y las rutas del proyecto.

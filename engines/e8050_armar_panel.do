@@ -83,22 +83,6 @@ merge m:1 codigo_dane_municipio using "`potencial_oro'"
 keep if _merge==3
 drop _merge
 
-*******************************************************
-**# Calcular variable de potencial a cualquier recurso mineral de oro
-*******************************************************
-* Los resultados han indicado que ambos tipos de potencial mueven tanto minería legal como ilegal
-gen poteMine_oro_distnc = min(poteMine_oro_distnc_roca_m, poteMine_oro_distnc_aluv_m)
-
-
-*******************************************************
-* Transformar distancia al potencial mineral en proximidad al potencial mineral
-*******************************************************
-* Para que la interpretación del indicador de distancia al potencial mineral
-* sea más intuitiva, voy a convertir distancia en proximidad
-gen proximidad_potencial_gnrl = 1 / (1 + poteMine_oro_distnc/1000)
-gen proximidad_potencial_roca = 1 / (1 + poteMine_oro_distnc_roca_m/1000)
-gen proximidad_potencial_aluvion = 1 / (1 + poteMine_oro_distnc_aluv_m/1000)
-
 
 *******************************************************
 * Producción legal 
@@ -115,14 +99,6 @@ bysort anno: count if mineLegl_oro_pRegls_prod_gr == 0
 * El problema de los ceros se analizó al final de e2101_panel_InfoAdicional_Minerales
 * Se concluyó que los ceros son errores de registro. Por eso se pueden eliminar.
 replace mineLegl_oro_pRegls_prod_gr = . if mineLegl_oro_pRegls_prod_gr == 0
-
-
-* Transformaciones logaritmicas
-gen log_mineLegl_oro_prod_gr = log(1+mineLegl_oro_pRegls_prod_gr)
-gen log_mineLegl_oro_valr_COP = log(1+mineLegl_oro_pRegls_valr_COP)
-
-* Volver a Explorar los valores de produccion por año y las variables generadas
-bysort anno: summarize mineLegl_oro_pRegls_prod_gr log_mineLegl_oro_prod_gr mineLegl_oro_pRegls_valr_COP log_mineLegl_oro_valr_COP
 
 
 *******************************************************
@@ -199,6 +175,9 @@ drop _merge
 **# Exportar
 ** Cargar información agrícola
 *******************************************************
+* Verificar la llave del panel antes de exportar
+isid codigo_dane_municipio anno
+
 save "$panel_analisis", replace
 display as text "Panel guardado en: " as result "$panel_analisis"
 
