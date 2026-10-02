@@ -1,0 +1,84 @@
+RESUMEN GENERAL DEL PANEL
+Unidad: municipio-anno
+
+Observaciones:        47812
+Variables:         1223
+Municipios distintos:         1122
+Annos distintos:           59
+Anno inicial:         1968
+Anno final:         2026
+
+VALIDACION DE LLAVES
+Filas sin municipio:            0
+Filas sin anno:            0
+Filas con llave incompleta:            0
+Filas involucradas en llaves duplicadas:            0
+Filas excedentes por duplicacion:            0
+
+ANNOS DISTINTOS POR MUNICIPIO CON LLAVES COMPLETAS
+Minimo:            1
+Mediana:         57.0
+Maximo:           59
+
+OBSERVACIONES POR ANNO
+anno,observaciones
+     1968,         665
+     1969,         665
+     1970,         665
+     1971,         665
+     1972,         665
+     1973,         665
+     1974,         665
+     1975,         665
+     1976,         665
+     1977,         665
+     1978,         665
+     1979,         665
+     1980,         665
+     1981,         665
+     1982,         665
+     1983,         665
+     1984,         665
+     1985,         665
+     1986,         665
+     1987,         665
+     1988,         665
+     1989,         665
+     1990,         665
+     1991,         665
+     1992,         665
+     1993,         665
+     1994,         665
+     1995,         665
+     1996,         665
+     1997,         665
+     1998,         665
+     1999,         665
+     2000,         665
+     2001,         665
+     2002,         665
+     2003,         665
+     2004,        1102
+     2005,        1102
+     2006,        1112
+     2007,        1116
+     2008,        1116
+     2009,        1116
+     2010,        1116
+     2011,        1116
+     2012,        1117
+     2013,        1118
+     2014,        1119
+     2015,        1103
+     2016,        1105
+     2017,        1106
+     2018,        1110
+     2019,        1102
+     2020,        1103
+     2021,        1102
+     2022,        1102
+     2023,        1102
+     2024,        1103
+     2025,         467
+     2026,         117
+anno_faltante,           0
