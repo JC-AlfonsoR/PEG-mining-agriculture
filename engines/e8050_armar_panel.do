@@ -113,12 +113,6 @@ merge 1:1 codigo_dane_municipio anno using "$data_intermediate/e2100_panel_Indic
 tabulate _merge
 drop _merge
 
-* Calcular flujo total de area SOLICITADA para mineria de oro en cada municipio-año
-gen tituMine_oro_AreaSo_total_m2Fx  = tituMine_oro_AreaSo_tGrn_m2Fx + tituMine_oro_AreaSo_tOtr_m2Fx
-gen log_tituMine_oro_AreaSo_total = log(1+tituMine_oro_AreaSo_total_m2Fx)
-
-* Calcular flujo total de area TITULADA para mineria de oro en cada municipio-año
-gen tituMine_oro_AreaTi_total_m2Fx  = tituMine_oro_AreaTi_tGrn_m2Fx + tituMine_oro_AreaTi_tOtr_m2Fx
 
 
 *******************************************************

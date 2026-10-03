@@ -2,7 +2,7 @@ RESUMEN GENERAL DEL PANEL
 Unidad: municipio-anno
 
 Observaciones:        47812
-Variables:         1217
+Variables:         1214
 Municipios distintos:         1122
 Annos distintos:           59
 Anno inicial:         1968
