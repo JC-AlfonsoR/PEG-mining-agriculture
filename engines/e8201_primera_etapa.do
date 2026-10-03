@@ -480,3 +480,141 @@ preserve
 	list anno n b_roca se_roca pv_roca b_aluv se_aluv pv_aluv  f_stat r2, noobs
 
 restore
+
+
+*******************************************************
+**# Panel
+*     ▄▄▄▄▄                       ▀▀█   
+*     █   ▀█  ▄▄▄   ▄ ▄▄    ▄▄▄     █   
+*     █▄▄▄█▀ ▀   █  █▀  █  █▀  █    █   
+*     █      ▄▀▀▀█  █   █  █▀▀▀▀    █   
+*     █      ▀▄▄▀█  █   █  ▀█▄▄▀    ▀▄▄ 
+*******************************************************
+
+**## Crear instrumento de interacción Precio X Potencial
+
+* La especifciacion principal es con el precio promedio anual
+* El precio anual max y min se usarán para revisar hipotesis de auge/declive
+gen instr_potRoca_precio = `potencial_mineral_roca'*`precio_mineral'
+gen instr_potAluvion_precio = `potencial_mineral_aluvion'*`precio_mineral'
+gen instr_potGnrl_precio = `potencial_mineral_gnrl'*`precio_mineral'
+
+
+* Conservar solo las variables de interes
+keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `precio_mineral' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio `intencion_mineria_legal' 
+
+*******************************************************
+* Declarar el Panel
+
+* Crear identificador numérico del municipio
+egen id_municipio = group(codigo_dane_municipio), label
+
+* verificar que (municipio, año) sea único. Si no sale error, significa que los identificadores funcionar
+isid id_municipio anno
+
+* Declarar el Panel
+xtset id_municipio	anno
+
+
+*******************************************************
+**## Minería Legal
+*******************************************************
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_roca * Precio 
+* Produccion legal: log_mineLegl_oro_prod_gr (sin multiplicar por precio)
+
+reg `mineria_legal' instr_potRoca_precio
+reg `mineria_legal' instr_potAluvion_precio
+reg `mineria_legal' instr_potGnrl_precio 
+
+*******************************************************
+**## Intención M. legal
+*******************************************************
+reg `intencion_mineria_legal' instr_potRoca_precio
+reg `intencion_mineria_legal' instr_potAluvion_precio
+reg `intencion_mineria_legal' instr_potGnrl_precio
+
+
+*******************************************************
+**## Minería Ilegal
+*******************************************************
+
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_aluvion * Precio
+* Mineria ilegal: mineIleg_oro_nwPrp_SR21_pct (sin multiplicar por precio)
+
+reg `mineria_ilegal' instr_potRoca_precio
+reg `mineria_ilegal' instr_potAluvion_precio
+reg `mineria_ilegal' instr_potGnrl_precio
+
+
+
+ *******************************************************                                       
+**# Efectos Fijos
+* ▄▄▄▄▄▄   ▄▀▀                  ▄                         ▄▄▄▄▄▄   ▀       ▀                
+* █      ▄▄█▄▄   ▄▄▄    ▄▄▄   ▄▄█▄▄   ▄▄▄    ▄▄▄          █      ▄▄▄     ▄▄▄    ▄▄▄    ▄▄▄  
+* █▄▄▄▄▄   █    █▀  █  █▀  ▀    █    █▀ ▀█  █   ▀         █▄▄▄▄▄   █       █   █▀ ▀█  █   ▀ 
+* █        █    █▀▀▀▀  █        █    █   █   ▀▀▀▄         █        █       █   █   █   ▀▀▀▄ 
+* █▄▄▄▄▄   █    ▀█▄▄▀  ▀█▄▄▀    ▀▄▄  ▀█▄█▀  ▀▄▄▄▀         █      ▄▄█▄▄     █   ▀█▄█▀  ▀▄▄▄▀ 
+*                                                                         █                
+*                                                                       ▀▀                 
+*******************************************************                                       
+
+
+
+ *******************************************************
+**## Minería Legal
+*******************************************************
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_roca * Precio 
+* Produccion legal: log_mineLegl_oro_prod_gr * Precio
+
+reghdfe `mineria_legal' instr_potRoca_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+reghdfe `mineria_legal' instr_potAluvion_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+reghdfe `mineria_legal' instr_potGnrl_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+*******************************************************
+**## Intención M. legal
+*******************************************************
+reghdfe `intencion_mineria_legal' instr_potRoca_precio, ///
+	absorb(id_municipio anno) vce(cluster id_municipio)
+
+reghdfe `intencion_mineria_legal' instr_potAluvion_precio, ///
+	absorb(id_municipio anno) vce(cluster id_municipio)
+	
+reghdfe `intencion_mineria_legal' instr_potGnrl_precio, ///
+	absorb(id_municipio anno) vce(cluster id_municipio)
+
+*******************************************************
+**## Minería Ilegal
+*******************************************************
+
+* La especificacion principal es con 
+* Potencial: proximidad_potencial_aluvion * Precio
+* Produccion ilegal: mineIleg_oro_nwPrp_SR21_pct * Precio
+
+reghdfe `mineria_ilegal' instr_potRoca_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+reghdfe `mineria_ilegal' instr_potAluvion_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+
+reghdfe `mineria_ilegal' instr_potGnrl_precio, ///
+	absorb(id_municipio anno) ///
+	vce(cluster id_municipio)
+	
+
+
+*****
+* Revisar conteo de observaciones de mineria legal e ilegal por año
+*bysort anno: summarize `mineria_ilegal' `mineria_legal'
