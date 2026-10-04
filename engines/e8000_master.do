@@ -51,3 +51,6 @@ do "$engines/e8051_resumir_panel_para_seguimiento.do"
 
 * Explorar la primera etapa
 do "$engines/e8201_primera_etapa.do"
+
+* Estimar VI
+do "$engines/e8501_VI_especificacionPrincipal.do"
