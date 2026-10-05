@@ -155,6 +155,85 @@ merge 1:1 codigo_dane_municipio anno using "$data_intermediate/e1101_panel_infor
 tabulate _merge
 drop _merge
 
+
+*******************************************************
+*     ▄▄▄▄▄                  ▄▄▄  ▄▄▄▄▄▄ ▄▄▄▄   ▄▄▄▄▄▄
+*     █   ▀█               ▄▀   ▀ █      █   ▀▄ █     
+*     █▄▄▄█▀               █      █▄▄▄▄▄ █    █ █▄▄▄▄▄
+*     █                    █      █      █    █ █     
+*     █        █            ▀▄▄▄▀ █▄▄▄▄▄ █▄▄▄▀  █▄▄▄▄▄
+**# P. CEDE
+*******************************************************
+local id_cede  codmpio
+local anno_cede ano
+
+* Archivos y variables que se incorporarán
+local archivo1 "PANEL_CARACTERISTICAS_GENERALES(2024).dta"
+local variables1 altura dismdo retro_pobl_rur
+
+local archivo2 "PANEL_SALUD_Y_SERVICIOS.dta"
+local variables2 icee_resto
+
+local archivo3 "PANEL_AGRICULTURA_Y_TIERRA(2024).dta"
+local variables3 vrf_peq_productor nuf_peq_productor
+
+local archivo4 "PANEL_BUEN_GOBIERNO(2024).dta"
+local variables4 inv_agropecuario inv_tranporte
+
+local archivo5 "PANEL_CONFLICTO_Y_VIOLENCIA(2024).dta"
+local variables5 hostig_MD desplazados_expulsion H_coca
+
+local archivo6 "PANEL_DE_EDUCACION(2023).dta"
+local variables6 anos_est_mun
+
+* Verificar la llave del panel que estamos construyendo
+isid codigo_dane_municipio anno
+
+* Archivo temporal reutilizado para cada componente CEDE
+tempfile cede_componente
+
+forvalues i = 1/6 {
+
+    * Preparar el componente CEDE sin perder el panel en memoria
+    preserve
+
+        use "$data_raw/aaa_panel_cede/microdatos/`archivo`i''", clear
+
+        * Conservar identificadores y variables seleccionadas
+        keep `id_cede' `anno_cede' `variables`i''
+
+        * Homologar los nombres de los identificadores
+        if "`id_cede'" != "codigo_dane_municipio" {
+            rename `id_cede' codigo_dane_municipio
+        }
+
+        if "`anno_cede'" != "anno" {
+            rename `anno_cede' anno
+        }
+
+        * Convertir el código municipal CEDE a texto de cinco dígitos
+		tostring codigo_dane_municipio, replace format(%05.0f)
+
+		* Verificar la llave
+		isid codigo_dane_municipio anno
+
+        save "`cede_componente'", replace
+
+    restore
+
+    * Incorporar variables sin agregar observaciones al panel
+    merge 1:1 codigo_dane_municipio anno ///
+        using "`cede_componente'", ///
+        keepusing(`variables`i'') ///
+        keep(master match)
+
+    * Revisar cuántas observaciones encontraron correspondencia
+    display as text "Cruce con: `archivo`i''"
+    tabulate _merge
+
+    drop _merge
+}
+
 *******************************************************
 *     ▄▄▄▄▄▄                               ▄                 
 *     █      ▄   ▄  ▄▄▄▄    ▄▄▄    ▄ ▄▄  ▄▄█▄▄   ▄▄▄    ▄ ▄▄ 

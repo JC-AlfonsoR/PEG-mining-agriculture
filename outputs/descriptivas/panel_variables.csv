@@ -1,7 +1,16 @@
 variable,etiqueta,tipo,n_validos,n_faltantes,pct_faltantes,n_ceros,media,desv_est,minimo,maximo
-anno,,long,47812,0,0.0000,0,,,,
+H_coca,Hectáreas cultivadas con coca,double,4249,43563,91.1131,0,616.776123047,1654.62658691,.070000000298,23147.9492188
+altura,(mean) altura,float,29499,18313,38.3021,0,1155.21936035,919.24432373,1,3350
+anno,,double,47812,0,0.0000,0,,,,
+anos_est_mun,Promedio de años de estudio de la población municipal. Se considera la población,float,1731,46081,96.3796,0,6.43587732315,1.37559556961,2.29977846146,11.7829685211
 codigo_dane_municipio,,str5,47812,0,0.0000,,,,,
+desplazados_expulsion,Número de personas expulsadas por desplazamiento,double,20941,26871,56.2014,0,340.47744751,1127.33898926,1,51882
+dismdo,Distancia lineal al principal mercado mayorista de alimentos,float,23989,23823,49.8264,249,121.156265259,96.7854003906,0,926.466918945
+hostig_MD,Total de hostigamientos-MinDefensa,byte,18456,29356,61.3988,17876,.0601972267032,.59146463871,0,41
+icee_resto,Indice de cobertura el�ctrica no en la cabecera municipal,double,5566,42246,88.3586,14,86.001953125,20.2755527496,0,100
 index,,long,47812,0,0.0000,1,12325.6738281,7252.24951172,0,37695
+inv_agropecuario,Inversión agropecuaria,float,10086,37726,78.9049,294,284581.4375,4041855.75,0,220823760
+inv_tranporte,Inversión en transporte,float,8826,38986,81.5402,155,3036450.75,32680154,0,1158935680
 mineIleg_carbon_area_SR21_km2,,double,12012,35800,74.8766,7702,.148625567555,1.70933043957,0,76.0734024048
 mineIleg_carbon_nwPrp_SR21_pct,,double,12012,35800,74.8766,8679,24.2670497894,40.7920188904,0,100
 mineIleg_carbon_prpMun_SR21_pct,,double,12012,35800,74.8766,7677,.0355022102594,.20489820838,0,7.56934595108
@@ -51,6 +60,7 @@ mineLegl_oro_pRegls_prod_gr,,double,2066,45746,95.6789,0,366623.96875,1053272,4,
 mineLegl_oro_pRegls_valr_COP,,double,2092,45720,95.6245,0,1872158976,7259204608,161.800003052,144164519936
 mineLegl_otros_pRegls_prod_m3,,double,34,47778,99.9289,1,435.202056885,421.764892578,0,1602.07995605
 mineLegl_otros_pRegls_valr_COP,,double,35,47777,99.9268,0,3771110.25,3250843.25,82905,11075342
+nuf_peq_productor,Numero de creditos pequeño productor,double,22666,25146,52.5935,1040,178.318664551,225.667114258,0,3105
 poteMine_cobre_area_roca_m2,,double,0,47812,100.0000,0,,,,
 poteMine_cobre_distnc_roca_m,,double,0,47812,100.0000,0,,,,
 poteMine_cobre_pctMun_roca_pct,,double,0,47812,100.0000,0,,,,
@@ -1133,6 +1143,7 @@ prodAgr_GCTrop_Produc_grpo_ton,,double,15629,32183,67.3116,126,36579.0546875,212
 prodAgr_total_ACosch_totl_ha,,double,20793,27019,56.5109,6,3906.44042969,6081.81884766,0,153986.796875
 prodAgr_total_ASembr_totl_ha,,double,20793,27019,56.5109,0,4429.97949219,6627.04931641,.0299999993294,162076.84375
 prodAgr_total_Produc_totl_ton,,double,20793,27019,56.5109,6,49165.2109375,190064.140625,0,4803860
+retro_pobl_rur,Retroproyecciones de población rural con base en el Censo Nacional mas reciente,double,22879,24933,52.1480,155,10180.2539063,11528.5019531,0,164345
 tituMine_carbon_AreaSo_tGrn_m2Fx,,double,36575,11237,23.5025,36557,20575.5058594,1352018.875,0,162470864
 tituMine_carbon_AreaSo_tGrn_m2Sk,,double,36575,11237,23.5025,36351,594538.0625,9141704,0,225518496
 tituMine_carbon_AreaSo_tOtr_m2Fx,,double,36575,11237,23.5025,36142,41743.0273438,1361614.875,0,139892736
@@ -1213,3 +1224,4 @@ tituMine_otros_AreaTi_tGrn_m2Fx,,double,36575,11237,23.5025,36574,48.8167724609,
 tituMine_otros_AreaTi_tGrn_m2Sk,,double,36575,11237,23.5025,36559,781.068359375,37336.375,0,1785473.375
 tituMine_otros_AreaTi_tOtr_m2Fx,,double,36575,11237,23.5025,36525,1147.48144531,57792.9765625,-935798.5,4468180
 tituMine_otros_AreaTi_tOtr_m2Sk,,double,36575,11237,23.5025,35958,26505.6816406,278448.0625,0,6173255
+vrf_peq_productor,Valor credito pequeño productor,double,22666,25146,52.5935,1040,1318.05456543,1757.25073242,0,24675.0742188
