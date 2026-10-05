@@ -43,7 +43,7 @@ local n_observaciones = _N
 local n_variables = c(k)
 
 unab variables : _all
-local variables : list sort variables
+*local variables : list sort variables
 
 *******************************************************
 **## Resumen general
@@ -340,7 +340,7 @@ postclose `tabla_cobertura'
 *******************************************************
 
 use "`inventario'", clear
-sort variable
+*sort variable
 
 format n_validos n_faltantes n_ceros %12.0f
 format pct_faltantes %9.4f
