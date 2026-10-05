@@ -1,9 +1,9 @@
 RESUMEN GENERAL DEL PANEL
 Unidad: municipio-anno
 
-Observaciones:        47812
-Variables:         1226
-Municipios distintos:         1122
+Observaciones:        51575
+Variables:         1229
+Municipios distintos:         1123
 Annos distintos:           59
 Anno inicial:         1968
 Anno final:         2026
@@ -17,7 +17,7 @@ Filas excedentes por duplicacion:            0
 
 ANNOS DISTINTOS POR MUNICIPIO CON LLAVES COMPLETAS
 Minimo:            1
-Mediana:         57.0
+Mediana:         59.0
 Maximo:           59
 
 OBSERVACIONES POR ANNO
@@ -54,31 +54,31 @@ anno,observaciones
      1997,         665
      1998,         665
      1999,         665
-     2000,         665
-     2001,         665
-     2002,         665
-     2003,         665
-     2004,        1102
-     2005,        1102
-     2006,        1112
-     2007,        1116
-     2008,        1116
-     2009,        1116
-     2010,        1116
-     2011,        1116
-     2012,        1117
-     2013,        1118
-     2014,        1119
-     2015,        1103
-     2016,        1105
-     2017,        1106
-     2018,        1110
-     2019,        1102
-     2020,        1103
-     2021,        1102
-     2022,        1102
-     2023,        1102
-     2024,        1103
-     2025,         467
-     2026,         117
+     2000,        1122
+     2001,        1122
+     2002,        1122
+     2003,        1122
+     2004,        1122
+     2005,        1122
+     2006,        1122
+     2007,        1122
+     2008,        1122
+     2009,        1122
+     2010,        1122
+     2011,        1122
+     2012,        1122
+     2013,        1122
+     2014,        1122
+     2015,        1122
+     2016,        1122
+     2017,        1122
+     2018,        1123
+     2019,        1122
+     2020,        1122
+     2021,        1122
+     2022,        1122
+     2023,        1122
+     2024,        1122
+     2025,        1122
+     2026,        1122
 anno_faltante,           0

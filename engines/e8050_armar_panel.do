@@ -235,6 +235,23 @@ forvalues i = 1/6 {
 }
 
 *******************************************************
+*       ▄▄▄  ▀▀█      ▀                 
+*     ▄▀   ▀   █    ▄▄▄    ▄▄▄▄▄   ▄▄▄  
+*     █        █      █    █ █ █  ▀   █ 
+*     █        █      █    █ █ █  ▄▀▀▀█ 
+*      ▀▄▄▄▀   ▀▄▄  ▄▄█▄▄  █ █ █  ▀▄▄▀█ 
+**# Exportar
+*******************************************************
+* Agrego las variables de CHIRPS (precipitación) y CHIRTS (Tempertura)
+
+* Cargar panel de variables climáticas
+merge 1:1 codigo_dane_municipio anno using "$data_intermediate/e1011_panel_indicadoresEspaciales_clima.dta"
+
+* Revisar el cruce y eliminar su indicador
+tabulate _merge
+drop _merge
+
+*******************************************************
 *     ▄▄▄▄▄▄                               ▄                 
 *     █      ▄   ▄  ▄▄▄▄    ▄▄▄    ▄ ▄▄  ▄▄█▄▄   ▄▄▄    ▄ ▄▄ 
 *     █▄▄▄▄▄  █▄█   █▀ ▀█  █▀ ▀█   █▀  ▀   █    ▀   █   █▀  ▀
