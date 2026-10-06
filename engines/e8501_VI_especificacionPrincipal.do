@@ -52,7 +52,9 @@ local mineria_ilegal mineIleg_oro_nwPrp_SR21_pct
 * El precio anual max y min se usarán para revisar hipotesis de auge/declive
 local precio_mineral precMine_oro_prmdio_oro_USoz
 
-
+* Controles exogenos
+local controles_clima clima_precpt_anual_tot_mm clima_tmprtr_max_med_gCel clima_tmprtr_min_med_gCel
+local controles_invariables_tiempo altura dismdo
 
 *******************************************************
 **# Complementar Panel
@@ -96,26 +98,44 @@ xtset id_municipio	anno
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns*
+keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo'
 
 
-**# Regresión simple sin controles
-* Minería ilegal explicando producción agrícola
+**# Minería ilegal explicando producción agrícola
+* Probar SIN y CON Controles
 reg prodAgr_total_ACosch_totl_ha `mineria_ilegal'
-*reg prodAgr_total_ASembr_totl_ha `mineria_ilegal'
-*reg prodAgr_total_Produc_totl_ton `mineria_ilegal'
+reg prodAgr_total_ACosch_totl_ha `mineria_ilegal' `controles_clima' `controles_invariables_tiempo'
+
+reg prodAgr_total_ASembr_totl_ha `mineria_ilegal'
+reg prodAgr_total_ASembr_totl_ha `mineria_ilegal' `controles_clima' `controles_invariables_tiempo'
+
+reg prodAgr_total_Produc_totl_ton `mineria_ilegal'
+reg prodAgr_total_Produc_totl_ton `mineria_ilegal' `controles_clima' `controles_invariables_tiempo'
 
 
-**# Regresión simple sin controles
-* Minería legal explicando producción agrícola
+**# Minería legal explicando producción agrícola
+* Probar SIN y CON Controles
 reg prodAgr_total_ACosch_totl_ha `intencion_mineria_legal'
-*reg prodAgr_total_ASembr_totl_ha `intencion_mineria_legal'
-*reg prodAgr_total_Produc_totl_ton `intencion_mineria_legal'
+reg prodAgr_total_ACosch_totl_ha `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo'
+
+reg prodAgr_total_ASembr_totl_ha `intencion_mineria_legal'
+reg prodAgr_total_ASembr_totl_ha `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo'
+
+reg prodAgr_total_Produc_totl_ton `intencion_mineria_legal'
+reg prodAgr_total_Produc_totl_ton `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo'
 
 
+**# Minería ilegal y minería legal explicando producción agrícola
+* Probar SIN y CON Controles
 reg prodAgr_total_ACosch_totl_ha `mineria_ilegal' `intencion_mineria_legal'
+reg prodAgr_total_ACosch_totl_ha `mineria_ilegal' `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo'
+
 reg prodAgr_total_ASembr_totl_ha `mineria_ilegal' `intencion_mineria_legal'
+reg prodAgr_total_ASembr_totl_ha `mineria_ilegal' `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo'
+
 reg prodAgr_total_Produc_totl_ton `mineria_ilegal' `intencion_mineria_legal'
+reg prodAgr_total_Produc_totl_ton `mineria_ilegal' `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo'
+
 
 * F=111.25
 * beta=10.69***, t=10.55
@@ -203,9 +223,18 @@ foreach y of local resultados_agricolas {
 	eststo clear
 
 	
-	** 1. VI simple
+	** 0. VI simple sin controles
 	quietly eststo vi_simple: ///
-		ivreghdfe `y_considerada' ///
+		ivreghdfe `y_considerada'  ///
+			(`mineria_ilegal' = instr_potRoca_precio), ///
+			cluster(codigo_dane_municipio) ///
+			first
+
+    quietly estadd scalar KP_F = e(widstat)
+	
+	** 1. VI simple controles
+	quietly eststo vi_simple_controles: ///
+		ivreghdfe `y_considerada' `controles_clima' `controles_invariables_tiempo' ///
 			(`mineria_ilegal' = instr_potRoca_precio), ///
 			cluster(codigo_dane_municipio) ///
 			first
@@ -215,7 +244,7 @@ foreach y of local resultados_agricolas {
 	
 	** 2. VI con efectos fijos de AÑO
 	quietly eststo vi_anno: ///
-        ivreghdfe `y_considerada' ///
+        ivreghdfe `y_considerada' `controles_clima' `controles_invariables_tiempo' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(anno) ///
             cluster(codigo_dane_municipio) ///
@@ -225,7 +254,7 @@ foreach y of local resultados_agricolas {
 	
 	** 3. VI con efectos fijos de MUNICIPIO
 	quietly eststo vi_municipio: ///
-        ivreghdfe `y_considerada' ///
+        ivreghdfe `y_considerada' `controles_clima' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(codigo_dane_municipio) ///
             cluster(codigo_dane_municipio) ///
@@ -236,7 +265,7 @@ foreach y of local resultados_agricolas {
 	
 	** Efecto fijo de MUNICIPIO y AÑO
 	quietly eststo vi_municipio_anno: ///
-        ivreghdfe `y_considerada' ///
+        ivreghdfe `y_considerada' `controles_clima' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(codigo_dane_municipio anno) ///
             cluster(codigo_dane_municipio) ///
@@ -249,26 +278,30 @@ foreach y of local resultados_agricolas {
 	display as text _newline ///
         "Estimando modelos para la variable dependiente: `y'"
 		
-	esttab vi_simple vi_anno vi_municipio vi_municipio_anno ///
+	esttab vi_simple vi_simple_controles vi_anno vi_municipio vi_municipio_anno ///
 		using "outputs/regresiones/VI_`y'.md", ///
-		replace md ///
+		replace md  ///
 		order(`mineria_ilegal') ///
 		mtitles( ///
 			"VI simple" ///
+			"VI simple + controles" ///
 			"EF año" ///
 			"EF municipio" ///
 			"EF municipio & año" ///
 		) ///
+		stats(N F, fmt(0 6) labels("Observaciones" "Estadístico F"))
 
 	* Mostrar resultado en STATA
-	esttab vi_simple vi_anno vi_municipio vi_municipio_anno, ///
+	esttab vi_simple vi_simple_controles vi_anno vi_municipio vi_municipio_anno, ///
 		order(`mineria_ilegal') ///
 		mtitles( ///
 			"VI simple" ///
+			"VI simple + controles" ///
 			"EF año" ///
 			"EF municipio" ///
 			"EF municipio & año" ///
 		) ///
+		stats(N F, fmt(0 6) labels("Observaciones" "Estadístico F"))
 
 	** Eliminar variable de logaritmo
 	drop log_y
@@ -297,10 +330,18 @@ foreach y of local resultados_agricolas {
         "Estimando modelos para la variable dependiente: `y'"
 	eststo clear
 
-	
-	** 1. VI simple
+	** 0. VI simple SIN controles
 	quietly eststo vi_simple: ///
-		ivreghdfe `y_considerada' `intencion_mineria_legal' ///
+ 		ivreghdfe `y_considerada' `intencion_mineria_legal'  ///
+			(`mineria_ilegal' = instr_potRoca_precio), ///
+			cluster(codigo_dane_municipio) ///
+			first
+
+    quietly estadd scalar KP_F = e(widstat)
+	
+	** 1. VI simple controles
+	quietly eststo vi_simple_controles: ///
+ 		ivreghdfe `y_considerada' `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo' ///
 			(`mineria_ilegal' = instr_potRoca_precio), ///
 			cluster(codigo_dane_municipio) ///
 			first
@@ -310,7 +351,7 @@ foreach y of local resultados_agricolas {
 	
 	** 2. VI con efectos fijos de AÑO
 	quietly eststo vi_anno: ///
-        ivreghdfe `y_considerada' `intencion_mineria_legal' ///
+        ivreghdfe `y_considerada' `intencion_mineria_legal' `controles_clima' `controles_invariables_tiempo' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(anno) ///
             cluster(codigo_dane_municipio) ///
@@ -320,7 +361,7 @@ foreach y of local resultados_agricolas {
 	
 	** 3. VI con efectos fijos de MUNICIPIO
 	quietly eststo vi_municipio: ///
-        ivreghdfe `y_considerada' `intencion_mineria_legal' ///
+        ivreghdfe `y_considerada' `intencion_mineria_legal' `controles_clima' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(codigo_dane_municipio) ///
             cluster(codigo_dane_municipio) ///
@@ -331,7 +372,7 @@ foreach y of local resultados_agricolas {
 	
 	** Efecto fijo de MUNICIPIO y AÑO
 	quietly eststo vi_municipio_anno: ///
-        ivreghdfe `y_considerada' `intencion_mineria_legal' ///
+        ivreghdfe `y_considerada' `intencion_mineria_legal' `controles_clima' ///
             (`mineria_ilegal' = instr_potRoca_precio), ///
             absorb(codigo_dane_municipio anno) ///
             cluster(codigo_dane_municipio) ///
@@ -345,26 +386,29 @@ foreach y of local resultados_agricolas {
         "Estimando modelos para la variable dependiente: `y'"
 	
 	* Exportar resultado
-	esttab vi_simple vi_anno vi_municipio vi_municipio_anno ///
+	esttab vi_simple vi_simple_controles vi_anno vi_municipio vi_municipio_anno ///
 		using "outputs/regresiones/VI_mLegal_`y'.md", ///
 		replace md ///
-		order(`mineria_ilegal') ///
 		mtitles( ///
 			"VI simple" ///
+			"VI simple + controles" ///
 			"EF año" ///
 			"EF municipio" ///
 			"EF municipio & año" ///
 		) ///
+		stats(N F, fmt(0 6) labels("Observaciones" "Estadístico F"))
 		
 	* Mostrar resultado en STATA
-	esttab vi_simple vi_anno vi_municipio vi_municipio_anno, ///
+	esttab vi_simple vi_simple_controles vi_anno vi_municipio vi_municipio_anno, ///
 		order(`mineria_ilegal') ///
 		mtitles( ///
 			"VI simple" ///
+			"VI simple + controles" ///
 			"EF año" ///
 			"EF municipio" ///
 			"EF municipio & año" ///
 		) ///
+		stats(N F, fmt(0 6) labels("Observaciones" "Estadístico F"))
 	
 
 	** Eliminar variable de logaritmo
