@@ -7,7 +7,7 @@
 ```mermaid
 flowchart LR
 
-%% Estilos
+%% Estilos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 classDef base_para_stata stroke:#f00
 
 %% Bases de datos crudas
@@ -35,7 +35,7 @@ Precios Materias Primas]
 CHIRPS_precipitacion[CHIRPS precipitación]
 CHIRTS_temperatura[CHIRTS Temperatura]
 
-%% Bases de datos intermedias
+%% Bases de datos intermedias %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 e2011_poligonos_titulosmineros_armonizado[data/intermediate/
 e2011_ANM_poligonosTitulosMineros]
 e2011_SGC_ZonasPotencialMineral_armonizado[data/intermediate/
@@ -54,7 +54,7 @@ e1001_panel_cultivos_UPRA]
 
 
 
-%% Bases de datos intermedias para STATA
+%% Bases de datos intermedias para STATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 e1101_panel_informacion_agricola[data/intermediate/
 e1101_panel_informacionAgricola]:::base_para_stata
 e1011_panel_IndicadoresEspaciales_Clima[data/intermediate/
@@ -65,8 +65,12 @@ e2101_panel_InfoAdicional_Minerales[data/intermediate/
 e2101_panel_InfoAdicional_Minerales]:::base_para_stata
 e3000_preciosMinerales[data/intermediate/
 e3000 Precios de minerales]:::base_para_stata
+panel_analisis[data/final/
+panel_municipio_anno.dta]:::base_para_stata
+panel_CEDE[data/raw/
+Panel CEDE]:::base_para_stata
 
-%% archivos de configuracion
+%% archivos de configuracion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 1001_2_crosswalk_armonizado[data/config/
 1001_2_crosswalk_armonizado]
 2011_crosswalk_minerales_armonizado[data/config/
@@ -74,7 +78,7 @@ e3000 Precios de minerales]:::base_para_stata
 minerales_armonizado]
 
 
-%% engines Python
+%% engines Python %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 e1001_processs_UPRA{e1001
 processs_UPRA}
@@ -108,88 +112,129 @@ Organizar Información Adicional de Minerales}
 e3000_procesarPreciosMinerales{e3000
 Procesar Precios de minerales}
 
-%% engines STATA
-e8100_procesar_datos_minerales((e8100 
-Procesar
-datos minerales))
+%% engines STATA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-e8200_explorar_primera_etapa((e8200 
-Explorar primera etapa))
+e8000_master((e8000 master))
+e8001_configurar((e8001 configurar))
+e8050_armar_panel((e8050 armar panel))
+e8051_resumir_panel_seguimiento((e8051 resumir
+panel para seguimiento))
+e8100_preparar_variables_analisis((e8100 preparar
+variables para análisis))
+e8501_VI_especificacionPrincipal((8501 VI
+Especificación Principal))
+e8201_primera_etapa((8201 Primera Etapa))
 
-e8500_estimar_VI_especificacion_principal((e8500 
-Estimar VI
-especificación principal))
 
-%% conexiones
+
+%% Resumenes %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+resumen_outputs_variables[outputs/
+descriptivas/
+panel_variables.csv]
+resumen_outputs_resumen[outputs/
+descriptivas/
+panel_resumen.txt]
+resumen_outputs_cobertura_clave[outputs/
+descriptivas/
+panel_cobertura_clave.csv]
+
+%% Resultados regresiones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+resultados_regresiones@{ shape: docs, label: "Resultados Regresiones"}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% conexiones %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %% e1001_processs_UPRA
-UPRA_antiguo---e1001_processs_UPRA
-UPRA_nuevo---e1001_processs_UPRA
-e1001_processs_UPRA---e1001_panel_cultivos_UPRA
-e1001_processs_UPRA---1001_2_crosswalk_armonizado
-
+UPRA_antiguo--->e1001_processs_UPRA
+UPRA_nuevo--->e1001_processs_UPRA
+e1001_processs_UPRA--->e1001_panel_cultivos_UPRA
+e1001_processs_UPRA--->1001_2_crosswalk_armonizado
+e1001_panel_cultivos_UPRA--->e1101_organizar_info_agricola
+e1101_organizar_info_agricola--->e1101_panel_informacion_agricola
 
 %% e2001_descargar_poligonostitulosmineros
-ANM_web---e2001_descargar_poligonostitulosmineros
-ANM_titulos_mineros---e2001_descargar_poligonostitulosmineros
-e2001_descargar_poligonostitulosmineros---e2001_poligonos_titulosmineros
+ANM_web--->e2001_descargar_poligonostitulosmineros
+ANM_titulos_mineros--->e2001_descargar_poligonostitulosmineros
+e2001_descargar_poligonostitulosmineros--->e2001_poligonos_titulosmineros
 
 %% e2011_armonizar_taxonomias_minerales
-e2001_poligonos_titulosmineros---e2011_armonizar_taxonomias_minerales
-SGC_zonas_potencial---e2011_armonizar_taxonomias_minerales
-SGC_aluviones---e2011_armonizar_taxonomias_minerales
-UPME_produccion_regalias---e2011_armonizar_taxonomias_minerales
-SR2021_mineria_ilegal---e2011_armonizar_taxonomias_minerales
-WB_pinkSheet_preciosMateriasPrimas---e2011_armonizar_taxonomias_minerales
+e2001_poligonos_titulosmineros--->e2011_armonizar_taxonomias_minerales
+SGC_zonas_potencial--->e2011_armonizar_taxonomias_minerales
+SGC_aluviones--->e2011_armonizar_taxonomias_minerales
+UPME_produccion_regalias--->e2011_armonizar_taxonomias_minerales
+SR2021_mineria_ilegal--->e2011_armonizar_taxonomias_minerales
+WB_pinkSheet_preciosMateriasPrimas--->e2011_armonizar_taxonomias_minerales
 
-e2011_armonizar_taxonomias_minerales---2011_crosswalk_minerales_armonizado
-e2011_armonizar_taxonomias_minerales---e2011_poligonos_titulosmineros_armonizado
-e2011_armonizar_taxonomias_minerales---e2011_SGC_ZonasPotencialMineral_armonizado
-e2011_armonizar_taxonomias_minerales---e2011_SGC_Aluviones_armonizado
-e2011_armonizar_taxonomias_minerales---e2011_UPME_produccionRegalias
-e2011_armonizar_taxonomias_minerales---e2011_SR2021_mineriaIlegal
-e2011_armonizar_taxonomias_minerales---e2011_WbPinkSheet_preciosMinerales_armonizado
+e2011_armonizar_taxonomias_minerales--->2011_crosswalk_minerales_armonizado
+e2011_armonizar_taxonomias_minerales--->e2011_poligonos_titulosmineros_armonizado
+e2011_armonizar_taxonomias_minerales--->e2011_SGC_ZonasPotencialMineral_armonizado
+e2011_armonizar_taxonomias_minerales--->e2011_SGC_Aluviones_armonizado
+e2011_armonizar_taxonomias_minerales--->e2011_UPME_produccionRegalias
+e2011_armonizar_taxonomias_minerales--->e2011_SR2021_mineriaIlegal
+e2011_armonizar_taxonomias_minerales--->e2011_WbPinkSheet_preciosMinerales_armonizado
 
 %% e2100_calcular_instrumentos_potencial
-e2011_SGC_ZonasPotencialMineral_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
-e2011_SGC_Aluviones_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
-DANE_poligonos_municipales---e2100_calcular_indicadoresGeoEspaciales_minerales
-e2011_poligonos_titulosmineros_armonizado---e2100_calcular_indicadoresGeoEspaciales_minerales
-e2100_calcular_indicadoresGeoEspaciales_minerales---e2100_panel_IndicadoresGeoEspaciales_Minerales
+e2011_SGC_ZonasPotencialMineral_armonizado--->e2100_calcular_indicadoresGeoEspaciales_minerales
+e2011_SGC_Aluviones_armonizado--->e2100_calcular_indicadoresGeoEspaciales_minerales
+DANE_poligonos_municipales--->e2100_calcular_indicadoresGeoEspaciales_minerales
+e2011_poligonos_titulosmineros_armonizado--->e2100_calcular_indicadoresGeoEspaciales_minerales
+e2100_calcular_indicadoresGeoEspaciales_minerales--->e2100_panel_IndicadoresGeoEspaciales_Minerales
 
 %% Controles climáticos
-e1010_descargar_precipitacion_temperatura---CHIRPS_precipitacion
-e1010_descargar_precipitacion_temperatura---CHIRTS_temperatura
-CHIRTS_temperatura---e1011_calcular_indicadoresEspaciales_clima
-CHIRPS_precipitacion---e1011_calcular_indicadoresEspaciales_clima
-DANE_poligonos_municipales---e1011_calcular_indicadoresEspaciales_clima
-e1011_calcular_indicadoresEspaciales_clima---e1011_panel_IndicadoresEspaciales_Clima
+e1010_descargar_precipitacion_temperatura--->CHIRPS_precipitacion
+e1010_descargar_precipitacion_temperatura--->CHIRTS_temperatura
+CHIRTS_temperatura--->e1011_calcular_indicadoresEspaciales_clima
+CHIRPS_precipitacion--->e1011_calcular_indicadoresEspaciales_clima
+DANE_poligonos_municipales--->e1011_calcular_indicadoresEspaciales_clima
+e1011_calcular_indicadoresEspaciales_clima--->e1011_panel_IndicadoresEspaciales_Clima
 
 %% Organizar información adicional de minerales
-e2011_SR2021_mineriaIlegal---e2101_organizar_informacionAdicional_minerales
-e2011_UPME_produccionRegalias---e2101_organizar_informacionAdicional_minerales
-e2101_organizar_informacionAdicional_minerales---e2101_panel_InfoAdicional_Minerales
+e2011_SR2021_mineriaIlegal--->e2101_organizar_informacionAdicional_minerales
+e2011_UPME_produccionRegalias--->e2101_organizar_informacionAdicional_minerales
+e2101_organizar_informacionAdicional_minerales--->e2101_panel_InfoAdicional_Minerales
 
 %% Precios de minerales
-e2011_WbPinkSheet_preciosMinerales_armonizado---e3000_procesarPreciosMinerales
-e3000_procesarPreciosMinerales---e3000_preciosMinerales
+e2011_WbPinkSheet_preciosMinerales_armonizado--->e3000_procesarPreciosMinerales
+e3000_procesarPreciosMinerales--->e3000_preciosMinerales
 
-%% Pre-procesamiento STATA
-e2101_panel_InfoAdicional_Minerales---e8100_procesar_datos_minerales
-e2100_panel_IndicadoresGeoEspaciales_Minerales---e8100_procesar_datos_minerales
+%% Armar panel en STATA
+e2100_panel_IndicadoresGeoEspaciales_Minerales--->e8050_armar_panel
+e2101_panel_InfoAdicional_Minerales--->e8050_armar_panel
+e3000_preciosMinerales-->e8050_armar_panel
+e1101_panel_informacion_agricola--->e8050_armar_panel
+e1011_panel_IndicadoresEspaciales_Clima--->e8050_armar_panel
+panel_CEDE--->e8050_armar_panel
 
-%% Primera etapa STATA
-e8100_procesar_datos_minerales---e8200_explorar_primera_etapa
-e3000_preciosMinerales---e8200_explorar_primera_etapa
+%% STATA
+ subgraph STATA
+
+ %% Rutinas globales
+ e8000_master
+ e8001_configurar
+
+%% Conexiones del main
+e8050_armar_panel--->panel_analisis
+panel_analisis--->e8051_resumir_panel_seguimiento
+panel_analisis--->e8100_preparar_variables_analisis
+e8100_preparar_variables_analisis--->e8501_VI_especificacionPrincipal
+e8100_preparar_variables_analisis--->e8201_primera_etapa 
+
+%% resumen para seguimiento
+e8051_resumir_panel_seguimiento--->resumen_outputs_variables
+e8051_resumir_panel_seguimiento--->resumen_outputs_resumen
+e8051_resumir_panel_seguimiento--->resumen_outputs_cobertura_clave
+
+%% regresiones de salida
+e8201_primera_etapa--->resultados_regresiones
+e8501_VI_especificacionPrincipal--->resultados_regresiones
+
+end
 
 
-%% VI
-e1001_panel_cultivos_UPRA---e1101_organizar_info_agricola
-e1101_organizar_info_agricola---e1101_panel_informacion_agricola
-e1101_panel_informacion_agricola---e8500_estimar_VI_especificacion_principal
-e3000_preciosMinerales---e8500_estimar_VI_especificacion_principal
-e8100_procesar_datos_minerales---e8500_estimar_VI_especificacion_principal
+
+
+
 
 ```
 
