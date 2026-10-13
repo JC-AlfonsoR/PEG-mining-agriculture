@@ -94,7 +94,7 @@ xtset id_municipio	anno
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo'
+keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo' prodAgr_GC*
 
 
 **# Minería ilegal explicando producción agrícola
@@ -177,7 +177,33 @@ local resultados_agricolas ///
 	prodAgr_CCTrns_ACosch_cicl_ha ///
 	prodAgr_total_ASembr_totl_ha ///
 	prodAgr_CCPerm_ASembr_cicl_ha ///
-	prodAgr_CCTrns_ASembr_cicl_ha	
+	prodAgr_CCTrns_ASembr_cicl_ha /// * incluir resultados por agrupaciones de cultivos
+	prodAgr_GCCerl_ACosch_grpo_ha ///
+	prodAgr_GCCerl_ASembr_grpo_ha ///
+	prodAgr_GCCerl_Produc_grpo_ton ///
+	prodAgr_GCFrut_ACosch_grpo_ha ///
+	prodAgr_GCFrut_ASembr_grpo_ha ///
+	prodAgr_GCFrut_Produc_grpo_ton ///
+	prodAgr_GCHort_ACosch_grpo_ha ///
+	prodAgr_GCHort_ASembr_grpo_ha ///
+	prodAgr_GCHort_Produc_grpo_ton ///
+	prodAgr_GCLegu_ACosch_grpo_ha ///
+	prodAgr_GCLegu_ASembr_grpo_ha ///
+	prodAgr_GCLegu_Produc_grpo_ton ///
+	prodAgr_GCMedc_ACosch_grpo_ha ///
+	prodAgr_GCMedc_ASembr_grpo_ha ///
+	prodAgr_GCMedc_Produc_grpo_ton ///
+	prodAgr_GCOlea_ACosch_grpo_ha ///
+	prodAgr_GCOlea_ASembr_grpo_ha ///
+	prodAgr_GCOlea_Produc_grpo_ton ///
+	prodAgr_GCRaiz_ACosch_grpo_ha ///
+	prodAgr_GCRaiz_ASembr_grpo_ha ///
+	prodAgr_GCRaiz_Produc_grpo_ton ///
+	prodAgr_GCTrop_ACosch_grpo_ha ///
+	prodAgr_GCTrop_ASembr_grpo_ha ///
+	prodAgr_GCTrop_Produc_grpo_ton ///
+	
+	
 
 local resAgro_todos_cultivos ///
 	prodAgr_total_Produc_totl_ton ///
@@ -278,12 +304,12 @@ drop log_y
 
 
 *******************************************************
-**# Vi Doble instrumento
-*     ▄    ▄ ▄▄▄▄▄          ▄▄▄▄  ▄▄▄▄▄                  ▄          
-*     ▀▄  ▄▀   █           ▀   ▀█   █    ▄ ▄▄    ▄▄▄   ▄▄█▄▄   ▄ ▄▄ 
-*      █  █    █               ▄▀   █    █▀  █  █   ▀    █     █▀  ▀
-*      ▀▄▄▀    █     ▀▀▀     ▄▀     █    █   █   ▀▀▀▄    █     █    
-*       ██   ▄▄█▄▄         ▄█▄▄▄▄ ▄▄█▄▄  █   █  ▀▄▄▄▀    ▀▄▄   █  
+**# 2VI
+*      ▄▄▄▄  ▄    ▄ ▄▄▄▄▄ 
+*     ▀   ▀█ ▀▄  ▄▀   █   
+*         ▄▀  █  █    █   
+*       ▄▀    ▀▄▄▀    █   
+*     ▄█▄▄▄▄   ██   ▄▄█▄▄ 
 *******************************************************
 
 * variables endogendas
