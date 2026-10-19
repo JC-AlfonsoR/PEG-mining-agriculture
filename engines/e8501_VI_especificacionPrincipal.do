@@ -80,6 +80,23 @@ isid id_municipio anno
 xtset id_municipio	anno
 
 
+**## Rezagos
+* Probar rezagos del precio del oro para verificar la hipótesis de que 
+* la minería legal necesita más tiempo de precios altos
+
+* Crear instrumentos con el precio rezagado
+foreach rezago in 1 3 5 {
+
+    gen double instr_potRoca_precio_L`rezago' = ///
+        `potencial_mineral_roca' * L`rezago'.`precio_mineral'
+
+    gen double instr_potAluvion_precio_L`rezago' = ///
+        `potencial_mineral_aluvion' * L`rezago'.`precio_mineral'
+
+    gen double instr_potGnrl_precio_L`rezago' = ///
+        `potencial_mineral_gnrl' * L`rezago'.`precio_mineral'
+
+}
 
 *******************************************************
 **# Regresión Directa
@@ -94,7 +111,7 @@ xtset id_municipio	anno
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno `potencial_mineral_roca' `potencial_mineral_aluvion' `potencial_mineral_gnrl' `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo' prodAgr_GC*
+keep codigo_dane_municipio anno instr_pot* `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo' prodAgr_GC*
 
 
 **# Minería ilegal explicando producción agrícola
@@ -187,12 +204,6 @@ local resultados_agricolas ///
 	prodAgr_GCHort_ACosch_grpo_ha ///
 	prodAgr_GCHort_ASembr_grpo_ha ///
 	prodAgr_GCHort_Produc_grpo_ton ///
-	prodAgr_GCLegu_ACosch_grpo_ha ///
-	prodAgr_GCLegu_ASembr_grpo_ha ///
-	prodAgr_GCLegu_Produc_grpo_ton ///
-	prodAgr_GCMedc_ACosch_grpo_ha ///
-	prodAgr_GCMedc_ASembr_grpo_ha ///
-	prodAgr_GCMedc_Produc_grpo_ton ///
 	prodAgr_GCOlea_ACosch_grpo_ha ///
 	prodAgr_GCOlea_ASembr_grpo_ha ///
 	prodAgr_GCOlea_Produc_grpo_ton ///
@@ -297,6 +308,227 @@ drop log_y
 
 
 
+*******************************************************
+**# 2VI-Lags
+*      ▄▄▄▄  ▄    ▄ ▄▄▄▄▄         ▄                          
+*     ▀   ▀█ ▀▄  ▄▀   █           █       ▄▄▄    ▄▄▄▄   ▄▄▄  
+*         ▄▀  █  █    █           █      ▀   █  █▀ ▀█  █   ▀ 
+*       ▄▀    ▀▄▄▀    █           █      ▄▀▀▀█  █   █   ▀▀▀▄ 
+*     ▄█▄▄▄▄   ██   ▄▄█▄▄         █▄▄▄▄▄ ▀▄▄▀█  ▀█▄▀█  ▀▄▄▄▀ 
+*                                                ▄  █        
+*                                                 ▀▀         
+* VI con instrumentos de precio rezagado: L1, L2 y L3
+*******************************************************
+
+* Requiere:
+* - Panel declarado.
+* - Instrumentos L1, L2 y L3 ya creados.
+* - Locals de resultados agrícolas y controles definidos
+*   en este mismo do-file.
+
+* Variables endógenas
+* Copias con nombres cortos para guardar primeras etapas
+capture drop mi_ilegal
+capture drop mi_intlegal
+
+clonevar mi_ilegal   = mineIleg_oro_nwPrp_SR21_pct
+clonevar mi_intlegal = log_tituMine_oro_AreaSo_total
+
+local mineria_ilegal mi_ilegal
+local intencion_mineria_legal mi_intlegal
+
+local endogenas `mineria_ilegal' `intencion_mineria_legal'
+
+* Nombres de modelos y prefijos de primeras etapas
+local modelos ///
+    vi_simple vi_simple_controles vi_anno ///
+    vi_municipio vi_municipio_anno
+
+local prefijos a b c d e
+
+* Formato común de las tablas
+local formato ///
+    mtitles("VI simple" "VI controles" "EF año" ///
+            "EF municipio" "EF mun + año") ///
+    b(4) se(4) ///
+    star(* 0.10 ** 0.05 *** 0.01)
+
+
+
+* Estimación por rezago y resultado agrícola
+*******************************************************
+
+foreach rezago in 3 5 {
+
+    * Dos instrumentos con el mismo rezago del precio
+    local instrumentos ///
+        instr_potRoca_precio_L`rezago' ///
+        instr_potAluvion_precio_L`rezago'
+
+    foreach y of local resultados_agricolas {
+
+        * Variable dependiente
+        tempvar log_y
+        gen double `log_y' = log(1 + `y')
+        local y_considerada `log_y'
+
+        display as text _newline ///
+            "Estimando: `y' | Rezago del precio: L`rezago'"
+
+        eststo clear
+
+        * Limpiar primeras etapas guardadas en la iteración anterior
+        foreach prefijo of local prefijos {
+            foreach x of local endogenas {
+                capture estimates drop `prefijo'`x'
+            }
+        }
+
+
+        ** a. VI simple sin controles
+        quietly eststo vi_simple: ///
+            ivreghdfe `y_considerada' ///
+                (`endogenas' = `instrumentos'), ///
+                cluster(codigo_dane_municipio) ///
+                first savefirst savefprefix(a)
+
+        quietly estadd scalar KP_F = e(widstat)
+
+
+        ** b. VI simple con controles
+        quietly eststo vi_simple_controles: ///
+            ivreghdfe `y_considerada' ///
+                `controles_clima' `controles_invariables_tiempo' ///
+                (`endogenas' = `instrumentos'), ///
+                cluster(codigo_dane_municipio) ///
+                first savefirst savefprefix(b)
+
+        quietly estadd scalar KP_F = e(widstat)
+
+
+        ** c. VI con efectos fijos de AÑO
+        quietly eststo vi_anno: ///
+            ivreghdfe `y_considerada' ///
+                `controles_clima' `controles_invariables_tiempo' ///
+                (`endogenas' = `instrumentos'), ///
+                absorb(anno) ///
+                cluster(codigo_dane_municipio) ///
+                first savefirst savefprefix(c)
+
+        quietly estadd scalar KP_F = e(widstat)
+
+
+        ** d. VI con efectos fijos de MUNICIPIO
+        quietly eststo vi_municipio: ///
+            ivreghdfe `y_considerada' `controles_clima' ///
+                (`endogenas' = `instrumentos'), ///
+                absorb(codigo_dane_municipio) ///
+                cluster(codigo_dane_municipio) ///
+                first savefirst savefprefix(d)
+
+        quietly estadd scalar KP_F = e(widstat)
+
+
+        ** e. VI con efectos fijos de MUNICIPIO y AÑO
+        quietly eststo vi_municipio_anno: ///
+            ivreghdfe `y_considerada' `controles_clima' ///
+                (`endogenas' = `instrumentos'), ///
+                absorb(codigo_dane_municipio anno) ///
+                cluster(codigo_dane_municipio) ///
+                first savefirst savefprefix(e)
+
+        quietly estadd scalar KP_F = e(widstat)
+
+
+        *******************************************************
+        ** Agregar F condicionales a las primeras etapas
+        *******************************************************
+
+        forvalues j = 1/5 {
+
+            local modelo : word `j' of `modelos'
+            local prefijo : word `j' of `prefijos'
+
+            quietly estimates restore `modelo'
+
+            matrix diagnosticos_PE = e(first)
+
+            foreach x of local endogenas {
+
+                quietly estadd scalar SW_F = ///
+                    el(diagnosticos_PE, ///
+                       rownumb(diagnosticos_PE, "SWF"), ///
+                       colnumb(diagnosticos_PE, "`x'")), ///
+                    replace : `prefijo'`x'
+            }
+        }
+
+
+        *******************************************************
+        ** Mostrar en Stata y exportar a Markdown
+        *******************************************************
+
+        local archivo ///
+            "outputs/regresiones/VI_dobleInstr`y'_L`rezago'.md"
+
+        * Ejecutar las mismas tablas para pantalla y archivo
+        foreach salida in pantalla archivo {
+
+            local destino ""
+            local escritura ""
+
+            if "`salida'" == "archivo" {
+                local destino `"using "`archivo'""'
+                local escritura "replace md"
+            }
+
+            * Segunda etapa
+            esttab `modelos' `destino', ///
+                `escritura' ///
+                title("Segunda etapa: `y' | Precio L`rezago'") ///
+                order(`endogenas') ///
+                `formato' ///
+                stats(N F KP_F, ///
+                    fmt(0 3 3) ///
+                    labels("Observaciones" "F del modelo" ///
+                           "Kleibergen-Paap rk Wald F"))
+
+            * Las primeras etapas se agregan al mismo archivo
+            if "`salida'" == "archivo" {
+                local escritura "append md"
+            }
+
+            * Primera etapa: minería ilegal
+            esttab a`mineria_ilegal' b`mineria_ilegal' ///
+                c`mineria_ilegal' d`mineria_ilegal' ///
+                e`mineria_ilegal' `destino', ///
+                `escritura' ///
+                title("Primera etapa: minería ilegal | Precio L`rezago'") ///
+                order(`instrumentos') ///
+                `formato' ///
+                stats(N SW_F, ///
+                    fmt(0 3) ///
+                    labels("Observaciones" "F condicional SW"))
+
+            * Primera etapa: intención de minería legal
+            esttab a`intencion_mineria_legal' ///
+                b`intencion_mineria_legal' ///
+                c`intencion_mineria_legal' ///
+                d`intencion_mineria_legal' ///
+                e`intencion_mineria_legal' `destino', ///
+                `escritura' ///
+                title("Primera etapa: intención legal | Precio L`rezago'") ///
+                order(`instrumentos') ///
+                `formato' ///
+                stats(N SW_F, ///
+                    fmt(0 3) ///
+                    labels("Observaciones" "F condicional SW"))
+        }
+
+        * Eliminar variable temporal de logaritmo
+        drop `log_y'
+    }
+}
 
 
 
@@ -534,6 +766,9 @@ foreach y of local resultados_agricolas   {
 	** Eliminar variable de logaritmo
 	drop log_y
 }
+
+
+
 
 
 

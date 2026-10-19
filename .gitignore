@@ -69,3 +69,7 @@ engines/.ipynb_checkpoints
 .ipynb_checkpoints/
 /Efforts
 *.stswp
+outputs/regresiones/Acosh.zip
+outputs/regresiones/ASembr.zip
+outputs/regresiones/Modelos_sin_rezagos.zip
+outputs/regresiones/Produc.zip
