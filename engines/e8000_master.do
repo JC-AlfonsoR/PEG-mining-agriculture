@@ -44,7 +44,7 @@ global proyecto "`c(pwd)'"
 do "engines/e8001_configurar.do"
 
 * Armar el panel final
-do "$engines/e8050_armar_panel.do"
+*do "$engines/e8050_armar_panel.do"
 
 * Exportar resumen del panel para seguimiento con git
 do "$engines/e8051_resumir_panel_para_seguimiento.do"

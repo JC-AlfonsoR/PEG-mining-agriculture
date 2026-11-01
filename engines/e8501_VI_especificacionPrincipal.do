@@ -391,14 +391,14 @@ foreach y of local resultados_agricolas   {
     quietly estadd scalar KP_F = e(widstat)
 	
 	** d. VI con efectos fijos de MUNICIPIO
-	quietly eststo vi_municipio: ///
+	*quietly eststo vi_municipio: ///
         ivreghdfe `y_considerada' `controles_clima' ///
             (`endogenas' = `instrumentos'), ///
             absorb(codigo_dane_municipio) ///
             cluster(codigo_dane_municipio) ///
             first savefirst savefprefix(d)
 
-    quietly estadd scalar KP_F = e(widstat)
+    *quietly estadd scalar KP_F = e(widstat)
 	
 	
 	** e. Efecto fijo de MUNICIPIO y AÑO
@@ -415,11 +415,11 @@ foreach y of local resultados_agricolas   {
 
 	local modelos ///
 		vi_simple vi_simple_controles vi_anno ///
-		vi_municipio vi_municipio_anno
+		vi_municipio_anno
 
-	local prefijos a b c d e
+	local prefijos a b c e
 
-	forvalues j = 1/5 {
+	forvalues j = 1/4 {
 
 		* Seleccionar modelo y prefijo correspondiente
 		local modelo : word `j' of `modelos'
@@ -453,17 +453,16 @@ foreach y of local resultados_agricolas   {
 		"VI simple" ///
 		"VI controles" ///
 		"EF año" ///
-		"EF mun" ///
 		"EF mun & año"
 		
 	* Segunda etapa: crea o reemplaza el archivo
 	esttab vi_simple vi_simple_controles vi_anno ///
-		vi_municipio vi_municipio_anno ///
+		vi_municipio_anno ///
 		using "outputs/regresiones/VI_dobleInstr`y'.md", ///
 		replace md ///
 		title("Segunda etapa: `y'") ///
 		order(`endogenas') ///
-		mtitles("VI simple" "VI controles" "EF año" "EF municipio" "EF mun + año") ///
+		mtitles("VI simple" "VI controles" "EF año" "EF mun + año") ///
 		b(4) se(4) ///
 		star(* 0.10 ** 0.05 *** 0.01) ///
 		stats(N F KP_F, ///
@@ -473,12 +472,12 @@ foreach y of local resultados_agricolas   {
 
 	* Primera etapa: minería ilegal
 	esttab a`mineria_ilegal' b`mineria_ilegal' ///
-		c`mineria_ilegal' d`mineria_ilegal' e`mineria_ilegal' ///
+		c`mineria_ilegal' e`mineria_ilegal' ///
 		using "outputs/regresiones/VI_dobleInstr`y'.md", ///
 		append md ///
 		title("Primera etapa: minería ilegal") ///
 		order(`instrumentos') ///
-		mtitles("VI simple" "VI controles" "EF año" "EF municipio" "EF mun + año") ///
+		mtitles("VI simple" "VI controles" "EF año" "EF mun + año") ///
 		b(4) se(4) ///
 		star(* 0.10 ** 0.05 *** 0.01) ///
 		stats(N SW_F, ///
@@ -487,13 +486,13 @@ foreach y of local resultados_agricolas   {
 
 	* Primera etapa: intención de minería legal
 	esttab a`intencion_mineria_legal' b`intencion_mineria_legal' ///
-		c`intencion_mineria_legal' d`intencion_mineria_legal' ///
+		c`intencion_mineria_legal' ///
 		e`intencion_mineria_legal' ///
 		using "outputs/regresiones/VI_dobleInstr`y'.md", ///
 		append md ///
 		title("Primera etapa: intención de minería legal") ///
 		order(`instrumentos') ///
-		mtitles("VI simple" "VI controles" "EF año" "EF municipio" "EF mun + año") ///
+		mtitles("VI simple" "VI controles" "EF año" "EF mun + año") ///
 		b(4) se(4) ///
 		star(* 0.10 ** 0.05 *** 0.01) ///
 		stats(N SW_F, ///
@@ -505,10 +504,10 @@ foreach y of local resultados_agricolas   {
 	
 	* Segunda etapa
 	esttab vi_simple vi_simple_controles vi_anno ///
-		vi_municipio vi_municipio_anno, ///
+		vi_municipio_anno, ///
 		title("Segunda etapa: `y'") ///
 		order(`endogenas') ///
-		mtitles("VI simple" "VI controles" "EF año" "EF municipio" "EF mun + año") ///
+		mtitles("VI simple" "VI controles" "EF año" "EF mun + año") ///
 		b(4) se(4) ///
 		star(* 0.10 ** 0.05 *** 0.01) ///
 		stats(N F KP_F, ///
@@ -518,10 +517,10 @@ foreach y of local resultados_agricolas   {
 
 	* Primera etapa: minería ilegal
 	esttab a`mineria_ilegal' b`mineria_ilegal' ///
-		c`mineria_ilegal' d`mineria_ilegal' e`mineria_ilegal', ///
+		c`mineria_ilegal' e`mineria_ilegal', ///
 		title("Primera etapa: minería ilegal") ///
 		order(`instrumentos') ///
-		mtitles("VI simple" "VI controles" "EF año" "EF municipio" "EF mun + año") ///
+		mtitles("VI simple" "VI controles" "EF año" "EF mun + año") ///
 		b(4) se(4) ///
 		star(* 0.10 ** 0.05 *** 0.01) ///
 		stats(N SW_F, ///
@@ -530,11 +529,11 @@ foreach y of local resultados_agricolas   {
 
 	* Primera etapa: intención de minería legal
 	esttab a`intencion_mineria_legal' b`intencion_mineria_legal' ///
-		c`intencion_mineria_legal' d`intencion_mineria_legal' ///
+		c`intencion_mineria_legal' ///
 		e`intencion_mineria_legal', ///
 		title("Primera etapa: intención de minería legal") ///
 		order(`instrumentos') ///
-		mtitles("VI simple" "VI controles" "EF año" "EF municipio" "EF mun + año") ///
+		mtitles("VI simple" "VI controles" "EF año" "EF mun + año") ///
 		b(4) se(4) ///
 		star(* 0.10 ** 0.05 *** 0.01) ///
 		stats(N SW_F, ///
