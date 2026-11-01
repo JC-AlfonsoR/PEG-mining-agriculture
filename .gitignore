@@ -2,6 +2,7 @@
 /data/raw
 /Seminario_Tesis/
 *.pyc
+/outputs/regresiones/*.pdf
 /data/intermediate
 /data/final/*.dta
 /data/0_Panel_CEDE
