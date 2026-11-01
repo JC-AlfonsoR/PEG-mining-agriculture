@@ -111,7 +111,7 @@ foreach rezago in 1 3 5 {
 
 
 * Conservar solo las variables de interes
-keep codigo_dane_municipio anno instr_pot* `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo' prodAgr_GC*
+keep codigo_dane_municipio anno instr_pot* `mineria_legal' `mineria_ilegal' `intencion_mineria_legal' instr_potRoca_precio instr_potAluvion_precio instr_potGnrl_precio prodAgr_total_* prodAgr_CCPerm_* prodAgr_CCTrns* `controles_clima' `controles_invariables_tiempo' prodAgr_GC* prodAgr_Ccafe* prodAgr_Carroz_* prodAgr_CplmAc* prodAgr_Cmaiz* prodAgr_Ccanna* prodAgr_Cpltno_* prodAgr_Ccacao* prodAgr_Cyuca* prodAgr_Cpapa* prodAgr_Cagcte* prodAgr_Cbnano_* prodAgr_Cfrijl* prodAgr_Csoya* prodAgr_Cnrnja_* prodAgr_Climon* prodAgr_Ctmate* prodAgr_Cahyma_* prodAgr_Cptill*
 
 
 **# Minería ilegal explicando producción agrícola
@@ -212,9 +212,63 @@ local resultados_agricolas ///
 	prodAgr_GCRaiz_Produc_grpo_ton ///
 	prodAgr_GCTrop_ACosch_grpo_ha ///
 	prodAgr_GCTrop_ASembr_grpo_ha ///
-	prodAgr_GCTrop_Produc_grpo_ton ///
-	
-	
+	prodAgr_GCTrop_Produc_grpo_ton /// * incluir resultados de 15 cultivos de mayor area
+	prodAgr_Ccafe_ACosch_cltv_ha /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Ccafe_ASembr_cltv_ha /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Ccafe_Produc_cltv_ton  /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Carroz_ACosch_cltv_ha ///
+	prodAgr_Carroz_ASembr_cltv_ha ///
+	prodAgr_Carroz_Produc_cltv_ton  ///
+	prodAgr_CplmAc_ACosch_cltv_ha ///
+	prodAgr_CplmAc_ASembr_cltv_ha ///
+	prodAgr_CplmAc_Produc_cltv_ton  ///
+	prodAgr_Cmaiz_ACosch_cltv_ha ///
+	prodAgr_Cmaiz_ASembr_cltv_ha ///
+	prodAgr_Cmaiz_Produc_cltv_ton  ///
+	prodAgr_Ccanna_ACosch_cltv_ha /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Ccanna_ASembr_cltv_ha /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Ccanna_Produc_cltv_ton  /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Cpltno_ACosch_cltv_ha ///
+	prodAgr_Cpltno_ASembr_cltv_ha ///
+	prodAgr_Cpltno_Produc_cltv_ton  ///
+	prodAgr_Ccacao_ACosch_cltv_ha /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Ccacao_ASembr_cltv_ha /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Ccacao_Produc_cltv_ton  /// * Tropicales son de interes por efectos estables encontrados
+	prodAgr_Cyuca_ACosch_cltv_ha ///
+	prodAgr_Cyuca_ASembr_cltv_ha ///
+	prodAgr_Cyuca_Produc_cltv_ton  ///
+	prodAgr_Cpapa_ACosch_cltv_ha ///
+	prodAgr_Cpapa_ASembr_cltv_ha ///
+	prodAgr_Cpapa_Produc_cltv_ton  ///
+	prodAgr_Cagcte_ACosch_cltv_ha ///
+	prodAgr_Cagcte_ASembr_cltv_ha ///
+	prodAgr_Cagcte_Produc_cltv_ton  ///
+	prodAgr_Cbnano_ACosch_cltv_ha ///
+	prodAgr_Cbnano_ASembr_cltv_ha ///
+	prodAgr_Cbnano_Produc_cltv_ton  ///
+	prodAgr_Cfrijl_ACosch_cltv_ha ///
+	prodAgr_Cfrijl_ASembr_cltv_ha ///
+	prodAgr_Cfrijl_Produc_cltv_ton  ///
+	prodAgr_Csoya_ACosch_cltv_ha ///
+	prodAgr_Csoya_ASembr_cltv_ha ///
+	prodAgr_Csoya_Produc_cltv_ton  ///
+	prodAgr_Cnrnja_ACosch_cltv_ha ///
+	prodAgr_Cnrnja_ASembr_cltv_ha ///
+	prodAgr_Cnrnja_Produc_cltv_ton  ///
+	prodAgr_Climon_ACosch_cltv_ha ///
+	prodAgr_Climon_ASembr_cltv_ha ///
+	prodAgr_Climon_Produc_cltv_ton  ///
+	prodAgr_Ctmate_ACosch_cltv_ha /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Ctmate_ASembr_cltv_ha /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Ctmate_Produc_cltv_ton /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Cahyma_ACosch_cltv_ha /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Cahyma_ASembr_cltv_ha /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Cahyma_Produc_cltv_ton /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Cptill_ACosch_cltv_ha /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Cptill_ASembr_cltv_ha /// * Hortalizas son de interes por efectos estables encontrados
+	prodAgr_Cptill_Produc_cltv_ton /// * Hortalizas son de interes por efectos estables encontrados
+
+
 
 local resAgro_todos_cultivos ///
 	prodAgr_total_Produc_totl_ton ///
